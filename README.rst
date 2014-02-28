@@ -36,7 +36,7 @@ Your cache backend should look something like this::
     CACHES = {
         'default': {
             'BACKEND': 'django_elasticache.memcached.ElastiCache',
-            'LOCATION': 'cache-c.drtgf.cfg.use1.cache.amazonaws.com:11211',
+            'LOCATION': 'cache-c.draaaf.cfg.use1.cache.amazonaws.com:11211',
         }
     }
 
@@ -51,6 +51,70 @@ fine.
 
 Django-elasticache changes default pylibmc params to increase performance.
 
+Another solutions
+-----------------
+
+ElastiCache provides memcached interface so there are three solution of using it:
+
+1. Memcached configured with location = Configuration Endpoint. In this case your application
+ will randomly connect to nodes in cluster and cache will be used with not optimal
+ way. At some moment you will be connected to first node and set item. Minute later
+ you will be connected to another node and will not able to get this item.
+
+
+ ::
+
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
+            'LOCATION': 'cache.gasdbp.cfg.use1.cache.amazonaws.com:11211',
+        }
+    }
+
+::
+
+
+2. Memcached configured with all nodes. It will work fine, memcache client will
+ separate items between all nodes and will balance loading on client side. You will
+ have problems only after adding new nodes or delete old nodes. In this case you should
+ add new nodes manually and don't forget update your app after all changes on AWS.
+
+ ::
+
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
+            'LOCATION': [
+                'cache.gqasdbp.0001.use1.cache.amazonaws.com:11211',
+                'cache.gqasdbp.0002.use1.cache.amazonaws.com:11211',
+            ]
+        }
+    }
+
+::
+
+
+3. Use django-elasticache. It will connect to cluster and retrieve ip addresses
+ of all nodes and configure memcached to use all nodes.
+
+
+ ::
+
+    CACHES = {
+        'default': {
+            'BACKEND': 'django_elasticache.memcached.ElastiCache',
+            'LOCATION': 'cache-c.draaaf.cfg.use1.cache.amazonaws.com:11211',
+        }
+    }
+
+::
+
+
+Difference between setup with nodes list (django-elasticache) and
+connection to only one configuration Endpoint (using dns routing) you can see on
+this graph:
+
+.. image:: asd
 
 Testing
 -------
