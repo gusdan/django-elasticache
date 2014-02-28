@@ -5,12 +5,14 @@ from nose.tools import eq_, raises
 
 TEST_PROTOCOL_1 = [
     'VERSION 1.4.14',
+    '',
     '1',
     'hostname|ip-address|port hostname||port'
 ]
 
 TEST_PROTOCOL_2 = [
     'VERSION 1.4.13',
+    '',
     '1',
     'hostname|ip-address|port hostname||port'
 ]

@@ -1,6 +1,7 @@
 """
 Backend for django cache
 """
+import socket
 from django.core.cache import InvalidCacheBackendError
 from django.core.cache.backends.memcached import PyLibMCCache
 from django.utils.functional import cached_property
@@ -45,7 +46,12 @@ class ElastiCache(PyLibMCCache):
         return list with all nodes in cluster
         """
         server, port = self._servers[0].split(':')
-        return get_cluster_info(server, port)['nodes']
+        try:
+            return get_cluster_info(server, port)['nodes']
+        except socket.gaierror, err:
+            raise Exception('Cannot connect to cluster {} ({})'.format(
+                self._servers[0], err
+            ))
 
     @property
     def _cache(self):

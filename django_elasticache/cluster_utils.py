@@ -38,6 +38,7 @@ def get_cluster_info(host, port):
     else:
         cmd = 'get AmazonElastiCache:cluster\n'
     client.write(cmd)
+    client.read_until('\r\n')
     res = client.read_until('\r\n').strip()
     try:
         version = int(res)

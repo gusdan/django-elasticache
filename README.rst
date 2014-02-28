@@ -4,7 +4,7 @@ Amazon ElastiCache backend for Django
 Simple Django cache backend for Amazon ElastiCache (memcached based). It uses
 `pylibmc <http://github.com/lericson/pylibmc>`_ and setup connection to each
 node in cluster using
-`Auto Discovery <http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/AutoDiscovery.html>`_
+`auto discovery <http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/AutoDiscovery.html>`_
 function.
 
 
@@ -35,20 +35,21 @@ Your cache backend should look something like this::
 
     CACHES = {
         'default': {
-            'BACKEND': 'django_elasticache.memcached.ElasctiCache',
+            'BACKEND': 'django_elasticache.memcached.ElastiCache',
             'LOCATION': 'cache-c.drtgf.cfg.use1.cache.amazonaws.com:11211',
         }
     }
 
-By the first call to cache it connect to cluster (using LOCATION),
-get list of all nodes and setup pylibmc client using full
-list of nodes. As result your cache will work with all nodes and
+By the first call to cache it connects to cluster (using LOCATION param),
+gets list of all nodes and setup pylibmc client using full
+list of nodes. As result your cache will work with all nodes in cluster and
 automatically detect new nodes in cluster. List of nodes are stored in class-level
-cached, so any changes in cluster take affect only after restart working process.
+cached, so any changes in cluster take affect only after restart of working process.
 But if you're using gunicorn or mod_wsgi you usually have max_request settings which
-restart process after some count of processed requests.
+restart process after some count of processed requests, so auto discovery will work
+fine.
 
-Django-elascticache changes default pylibmc params to increase performance.
+Django-elasticache changes default pylibmc params to increase performance.
 
 
 Testing
