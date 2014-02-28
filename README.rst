@@ -114,7 +114,7 @@ Difference between setup with nodes list (django-elasticache) and
 connection to only one configuration Endpoint (using dns routing) you can see on
 this graph:
 
-.. image:: asd
+.. image:: https://raw.github.com/gusdan/django-elasticache/master/docs/images/get%20operation%20in%20cluster.png
 
 Testing
 -------
