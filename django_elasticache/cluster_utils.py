@@ -2,6 +2,7 @@
 utils for discovery cluster
 """
 from distutils.version import StrictVersion
+import re
 from telnetlib import Telnet
 
 
@@ -38,17 +39,19 @@ def get_cluster_info(host, port):
     else:
         cmd = 'get AmazonElastiCache:cluster\n'
     client.write(cmd)
-    client.read_until('\r\n')
-    res = client.read_until('\r\n').strip()
+    res = client.read_until('\n\r\nEND\r\n')
+    client.close()
+    ls = filter(None, re.compile(r'\r?\n').split(res))
+    if len(ls) != 4:
+        raise WrongProtocolData(cmd, res)
+
     try:
-        version = int(res)
+        version = int(ls[1])
     except ValueError:
         raise WrongProtocolData(cmd, res)
-    res = client.read_until('\r\n').strip()
-    client.close()
     nodes = []
     try:
-        for node in res.split(' '):
+        for node in ls[2].split(' '):
             host, ip, port = node.split('|')
             nodes.append('{}:{}'.format(ip or host, port))
     except ValueError:

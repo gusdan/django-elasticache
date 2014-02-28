@@ -1,20 +1,16 @@
-from mock import patch, call
+from mock import patch, call, MagicMock
 from django_elasticache.cluster_utils import (
     get_cluster_info, WrongProtocolData)
 from nose.tools import eq_, raises
 
 TEST_PROTOCOL_1 = [
     'VERSION 1.4.14',
-    '',
-    '1',
-    'hostname|ip-address|port hostname||port'
+    'CONFIG cluster 0 138\r\n1\nhost|ip|port host||port\n\r\nEND\r\n',
 ]
 
 TEST_PROTOCOL_2 = [
     'VERSION 1.4.13',
-    '',
-    '1',
-    'hostname|ip-address|port hostname||port'
+    'CONFIG cluster 0 138\r\n1\nhost|ip|port host||port\n\r\nEND\r\n',
 ]
 
 
@@ -24,12 +20,12 @@ def test_happy_path(Telnet):
     client.read_until.side_effect = TEST_PROTOCOL_1
     info = get_cluster_info('', 0)
     eq_(info['version'], 1)
-    eq_(info['nodes'], ['ip-address:port', 'hostname:port'])
+    eq_(info['nodes'], ['ip:port', 'host:port'])
 
 
 @raises(WrongProtocolData)
-@patch('django_elasticache.cluster_utils.Telnet')
-def test_bad_protocol(Telnet):
+@patch('django_elasticache.cluster_utils.Telnet', MagicMock())
+def test_bad_protocol():
     get_cluster_info('', 0)
 
 
