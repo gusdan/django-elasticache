@@ -27,7 +27,7 @@ def get_cluster_info(host, port):
         'version': '1.4.4'
     }
     """
-    client = Telnet(host, port)
+    client = Telnet(host, int(port))
     client.write('version\n')
     res = client.read_until('\r\n').strip()
     version_list = res.split(' ')
