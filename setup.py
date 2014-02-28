@@ -6,9 +6,10 @@ import django_elasticache
 setup(
     name='django-elasticache',
     version=django_elasticache.__version__,
-    description='Django cache backend for Amazon ElastiCache memcached',
+    description='Django cache backend for Amazon ElastiCache (memcached)',
     long_description=open('README.rst').read(),
     author='Danil Gusev',
+    platforms='any',
     author_email='danil.gusev@gmail.com',
     url='http://github.com/gusdan/django-elasticache',
     license='MIT',
