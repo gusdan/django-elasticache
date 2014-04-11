@@ -21,7 +21,7 @@ Installation
 
 Get it from `pypi <http://pypi.python.org/pypi/django-elasticache>`_::
 
-    pip install django-pylibmc
+    pip install django-elasticache
 
 or `github <http://github.com/gusdan/django-elasticache>`_::
 
