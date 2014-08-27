@@ -53,19 +53,14 @@ class ElastiCache(PyLibMCCache):
                 self._servers[0], err
             ))
 
-    @property
+    @cached_property
     def _cache(self):
         # PylibMC uses cache options as the 'behaviors' attribute.
         # It also needs to use threadlocals, because some versions of
         # PylibMC don't play well with the GIL.
-        client = getattr(self._local, 'client', None)
-        if client:
-            return client
 
         client = self._lib.Client(self.get_cluster_nodes)
         if self._options:
             client.behaviors = self._options
-
-        self._local.client = client
 
         return client
