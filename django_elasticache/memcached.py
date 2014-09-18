@@ -58,7 +58,12 @@ class ElastiCache(PyLibMCCache):
         # PylibMC uses cache options as the 'behaviors' attribute.
         # It also needs to use threadlocals, because some versions of
         # PylibMC don't play well with the GIL.
-        client = getattr(self._local, 'client', None)
+
+        # instance to store cached version of client
+        # in Django 1.7 use self
+        # in Django < 1.7 use thread local
+        container = getattr(self, '_local', self)
+        client = getattr(container, '_client', None)
         if client:
             return client
 
@@ -66,6 +71,6 @@ class ElastiCache(PyLibMCCache):
         if self._options:
             client.behaviors = self._options
 
-        self._local.client = client
+        container._client = client
 
         return client
