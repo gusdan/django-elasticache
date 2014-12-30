@@ -2,6 +2,7 @@
 utils for discovery cluster
 """
 from distutils.version import StrictVersion
+from django.utils.encoding import smart_text
 import re
 from telnetlib import Telnet
 
@@ -28,20 +29,20 @@ def get_cluster_info(host, port):
     }
     """
     client = Telnet(host, int(port))
-    client.write('version\n')
-    res = client.read_until('\r\n').strip()
-    version_list = res.split(' ')
-    if len(version_list) != 2 or version_list[0] != 'VERSION':
+    client.write(b'version\n')
+    res = client.read_until(b'\r\n').strip()
+    version_list = res.split(b' ')
+    if len(version_list) != 2 or version_list[0] != b'VERSION':
         raise WrongProtocolData('version', res)
     version = version_list[1]
-    if StrictVersion(version) >= StrictVersion('1.4.14'):
-        cmd = 'config get cluster\n'
+    if StrictVersion(smart_text(version)) >= StrictVersion('1.4.14'):
+        cmd = b'config get cluster\n'
     else:
-        cmd = 'get AmazonElastiCache:cluster\n'
+        cmd = b'get AmazonElastiCache:cluster\n'
     client.write(cmd)
-    res = client.read_until('\n\r\nEND\r\n')
+    res = client.read_until(b'\n\r\nEND\r\n')
     client.close()
-    ls = filter(None, re.compile(r'\r?\n').split(res))
+    ls = list(filter(None, re.compile(br'\r?\n').split(res)))
     if len(ls) != 4:
         raise WrongProtocolData(cmd, res)
 
@@ -51,9 +52,10 @@ def get_cluster_info(host, port):
         raise WrongProtocolData(cmd, res)
     nodes = []
     try:
-        for node in ls[2].split(' '):
-            host, ip, port = node.split('|')
-            nodes.append('{}:{}'.format(ip or host, port))
+        for node in ls[2].split(b' '):
+            host, ip, port = node.split(b'|')
+            nodes.append('{}:{}'.format(smart_text(ip or host),
+                                        smart_text(port)))
     except ValueError:
         raise WrongProtocolData(cmd, res)
     return {

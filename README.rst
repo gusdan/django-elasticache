@@ -12,9 +12,9 @@ Requirements
 ------------
 
 * pylibmc
-* Django 1.3+.
+* Django 1.5+.
 
-It was written and tested on Python 2.7.
+It was written and tested on Python 2.7 and 3.4.
 
 Installation
 ------------
