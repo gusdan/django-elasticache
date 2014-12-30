@@ -9,13 +9,13 @@ else:
 
 
 TEST_PROTOCOL_1 = [
-    'VERSION 1.4.14',
-    'CONFIG cluster 0 138\r\n1\nhost|ip|port host||port\n\r\nEND\r\n',
+    b'VERSION 1.4.14',
+    b'CONFIG cluster 0 138\r\n1\nhost|ip|port host||port\n\r\nEND\r\n',
 ]
 
 TEST_PROTOCOL_2 = [
-    'VERSION 1.4.13',
-    'CONFIG cluster 0 138\r\n1\nhost|ip|port host||port\n\r\nEND\r\n',
+    b'VERSION 1.4.13',
+    b'CONFIG cluster 0 138\r\n1\nhost|ip|port host||port\n\r\nEND\r\n',
 ]
 
 
@@ -40,8 +40,8 @@ def test_last_versions(Telnet):
     client.read_until.side_effect = TEST_PROTOCOL_1
     get_cluster_info('', 0)
     client.write.assert_has_calls([
-        call('version\n'),
-        call('config get cluster\n'),
+        call(b'version\n'),
+        call(b'config get cluster\n'),
     ])
 
 
@@ -51,6 +51,6 @@ def test_prev_versions(Telnet):
     client.read_until.side_effect = TEST_PROTOCOL_2
     get_cluster_info('', 0)
     client.write.assert_has_calls([
-        call('version\n'),
-        call('get AmazonElastiCache:cluster\n'),
+        call(b'version\n'),
+        call(b'get AmazonElastiCache:cluster\n'),
     ])
