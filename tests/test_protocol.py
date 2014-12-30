@@ -1,7 +1,12 @@
-from mock import patch, call, MagicMock
 from django_elasticache.cluster_utils import (
     get_cluster_info, WrongProtocolData)
 from nose.tools import eq_, raises
+import sys
+if sys.version < '3':
+    from mock import patch, call, MagicMock
+else:
+    from unittest.mock import patch, call, MagicMock
+
 
 TEST_PROTOCOL_1 = [
     'VERSION 1.4.14',

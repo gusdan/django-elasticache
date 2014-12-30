@@ -1,6 +1,11 @@
 from django.conf import global_settings, settings
-from mock import patch, Mock
 from nose.tools import eq_, raises
+import sys
+if sys.version < '3':
+    from mock import patch, Mock
+else:
+    from unittest.mock import patch, Mock
+
 
 # Initialize django 1.7
 settings.configure()

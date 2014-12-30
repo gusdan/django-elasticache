@@ -41,7 +41,7 @@ def get_cluster_info(host, port):
     client.write(cmd)
     res = client.read_until('\n\r\nEND\r\n')
     client.close()
-    ls = filter(None, re.compile(r'\r?\n').split(res))
+    ls = list(filter(None, re.compile(r'\r?\n').split(res)))
     if len(ls) != 4:
         raise WrongProtocolData(cmd, res)
 
