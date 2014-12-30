@@ -1,6 +1,10 @@
-from django.conf import global_settings
+from django.conf import global_settings, settings
 from mock import patch, Mock
 from nose.tools import eq_, raises
+
+# Initialize django 1.7
+settings.configure()
+global_settings.configured = True
 
 
 @patch('django.conf.settings', global_settings)
