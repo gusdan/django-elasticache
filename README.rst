@@ -2,10 +2,9 @@ Amazon ElastiCache backend for Django
 =====================================
 
 Simple Django cache backend for Amazon ElastiCache (memcached based). It uses
-`pylibmc <http://github.com/lericson/pylibmc>`_ and setup connection to each
-node in cluster using
-`auto discovery <http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/AutoDiscovery.html>`_
-function.
+`pylibmc <http://github.com/lericson/pylibmc>`_ and sets up a connection to each
+node in the cluster using
+`auto discovery <http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/AutoDiscovery.html>`_.
 
 
 Requirements
@@ -56,11 +55,13 @@ Another solutions
 
 ElastiCache provides memcached interface so there are three solution of using it:
 
-1. Memcached configured with location = Configuration Endpoint. In this case your application
- will randomly connect to nodes in cluster and cache will be used with not optimal
- way. At some moment you will be connected to first node and set item. Minute later
- you will be connected to another node and will not able to get this item.
+1. Memcached configured with location = Configuration Endpoint
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+In this case your application
+will randomly connect to nodes in cluster and cache will be used with not optimal
+way. At some moment you will be connected to first node and set item. Minute later
+you will be connected to another node and will not able to get this item.
 
  ::
 
@@ -74,10 +75,13 @@ ElastiCache provides memcached interface so there are three solution of using it
 ::
 
 
-2. Memcached configured with all nodes. It will work fine, memcache client will
- separate items between all nodes and will balance loading on client side. You will
- have problems only after adding new nodes or delete old nodes. In this case you should
- add new nodes manually and don't forget update your app after all changes on AWS.
+2. Memcached configured with all nodes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It will work fine, memcache client will
+separate items between all nodes and will balance loading on client side. You will
+have problems only after adding new nodes or delete old nodes. In this case you should
+add new nodes manually and don't forget update your app after all changes on AWS.
 
  ::
 
@@ -94,9 +98,11 @@ ElastiCache provides memcached interface so there are three solution of using it
 ::
 
 
-3. Use django-elasticache. It will connect to cluster and retrieve ip addresses
- of all nodes and configure memcached to use all nodes.
+3. Use django-elasticache
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
+It will connect to cluster and retrieve ip addresses
+of all nodes and configure memcached to use all nodes.
 
  ::
 
