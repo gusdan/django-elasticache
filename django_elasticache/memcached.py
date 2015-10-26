@@ -1,6 +1,7 @@
 """
 Backend for django cache
 """
+import logging
 import socket
 from django.core.cache import InvalidCacheBackendError
 from django.core.cache.backends.memcached import PyLibMCCache
@@ -28,12 +29,14 @@ class ElastiCache(PyLibMCCache):
         """
         update connection params to maximize performance
         """
-        if not params.get('BINARY', True):
-            raise Warning('To increase performance please use ElastiCache'
-                          ' in binary mode')
+        if not params.get('binary', True):
+            self.binary = False
+            logging.warning('To increase performance please use ElastiCache'
+                            ' in binary mode')
         else:
-            params['BINARY'] = True  # patch params, set binary mode
-        if not 'OPTIONS' in params:
+            self.binary = True
+
+        if 'OPTIONS' not in params:
             # set special 'behaviors' pylibmc attributes
             params['OPTIONS'] = {
                 'tcp_nodelay': True,
@@ -67,7 +70,7 @@ class ElastiCache(PyLibMCCache):
         if client:
             return client
 
-        client = self._lib.Client(self.get_cluster_nodes)
+        client = self._lib.Client(self.get_cluster_nodes, binary=self.binary)
         if self._options:
             client.behaviors = self._options
 
