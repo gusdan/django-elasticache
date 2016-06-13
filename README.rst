@@ -127,4 +127,4 @@ Testing
 
 Run the tests like this::
 
-    nosetest
+    nosetests

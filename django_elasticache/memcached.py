@@ -2,10 +2,24 @@
 Backend for django cache
 """
 import socket
+from functools import wraps
 from django.core.cache import InvalidCacheBackendError
 from django.core.cache.backends.memcached import PyLibMCCache
-from django.utils.functional import cached_property
 from .cluster_utils import get_cluster_info
+
+
+def invalidate_cache_after_error(f):
+    """
+    catch any exception and invalidate internal cache with list of nodes
+    """
+    @wraps(f)
+    def wrapper(self, *args, **kwds):
+        try:
+            return f(self, *args, **kwds)
+        except Exception:
+            self.clear_cluster_nodes_cache()
+            raise
+    return wrapper
 
 
 class ElastiCache(PyLibMCCache):
@@ -40,18 +54,25 @@ class ElastiCache(PyLibMCCache):
                 'ketama': True
             }
 
-    @cached_property
+    def clear_cluster_nodes_cache(self):
+        """clear internal cache with list of nodes in cluster"""
+        if hasattr(self, '_cluster_nodes_cache'):
+            del self._cluster_nodes_cache
+
     def get_cluster_nodes(self):
         """
         return list with all nodes in cluster
         """
-        server, port = self._servers[0].split(':')
-        try:
-            return get_cluster_info(server, port)['nodes']
-        except (socket.gaierror, socket.timeout) as err:
-            raise Exception('Cannot connect to cluster {} ({})'.format(
-                self._servers[0], err
-            ))
+        if not hasattr(self, '_cluster_nodes_cache'):
+            server, port = self._servers[0].split(':')
+            try:
+                self._cluster_nodes_cache = (
+                    get_cluster_info(server, port)['nodes'])
+            except (socket.gaierror, socket.timeout) as err:
+                raise Exception('Cannot connect to cluster {} ({})'.format(
+                    self._servers[0], err
+                ))
+        return self._cluster_nodes_cache
 
     @property
     def _cache(self):
@@ -67,10 +88,30 @@ class ElastiCache(PyLibMCCache):
         if client:
             return client
 
-        client = self._lib.Client(self.get_cluster_nodes)
+        client = self._lib.Client(self.get_cluster_nodes())
         if self._options:
             client.behaviors = self._options
 
         container._client = client
 
         return client
+
+    @invalidate_cache_after_error
+    def get(self, *args, **kwargs):
+        return super(ElastiCache, self).get(*args, **kwargs)
+
+    @invalidate_cache_after_error
+    def get_many(self, *args, **kwargs):
+        return super(ElastiCache, self).get_many(*args, **kwargs)
+
+    @invalidate_cache_after_error
+    def set(self, *args, **kwargs):
+        return super(ElastiCache, self).set(*args, **kwargs)
+
+    @invalidate_cache_after_error
+    def set_many(self, *args, **kwargs):
+        return super(ElastiCache, self).set_many(*args, **kwargs)
+
+    @invalidate_cache_after_error
+    def delete(self, *args, **kwargs):
+        return super(ElastiCache, self).delete(*args, **kwargs)

@@ -53,14 +53,48 @@ def test_split_servers(get_cluster_info):
 
 @patch('django.conf.settings', global_settings)
 @patch('django_elasticache.memcached.get_cluster_info')
-def test_property_cache(get_cluster_info):
+def test_node_info_cache(get_cluster_info):
     from django_elasticache.memcached import ElastiCache
-    backend = ElastiCache('h:0', {})
     servers = ['h1:p', 'h2:p']
     get_cluster_info.return_value = {
         'nodes': servers
     }
+
+    backend = ElastiCache('h:0', {})
     backend._lib.Client = Mock()
     backend.set('key1', 'val')
+    backend.get('key1')
     backend.set('key2', 'val')
+    backend.get('key2')
     backend._lib.Client.assert_called_once_with(servers)
+    eq_(backend._cache.get.call_count, 2)
+    eq_(backend._cache.set.call_count, 2)
+
+    get_cluster_info.assert_called_once_with('h', '0')
+
+
+@patch('django.conf.settings', global_settings)
+@patch('django_elasticache.memcached.get_cluster_info')
+def test_invalidate_cache(get_cluster_info):
+    from django_elasticache.memcached import ElastiCache
+    servers = ['h1:p', 'h2:p']
+    get_cluster_info.return_value = {
+        'nodes': servers
+    }
+
+    backend = ElastiCache('h:0', {})
+    backend._lib.Client = Mock()
+    assert backend._cache
+    backend._cache.get = Mock()
+    backend._cache.get.side_effect = Exception()
+    try:
+        backend.get('key1', 'val')
+    except Exception:
+        pass
+    backend._local._client = None
+    try:
+        backend.get('key1', 'val')
+    except Exception:
+        pass
+    eq_(backend._cache.get.call_count, 2)
+    eq_(get_cluster_info.call_count, 2)
