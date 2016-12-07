@@ -32,7 +32,7 @@ def get_cluster_info(host, port):
     client.write(b'version\n')
     res = client.read_until(b'\r\n').strip()
     version_list = res.split(b' ')
-    if len(version_list) != 2 or version_list[0] != b'VERSION':
+    if not len(version_list) in [2, 3] or version_list[0] != b'VERSION':
         raise WrongProtocolData('version', res)
     version = version_list[1]
     if StrictVersion(smart_text(version)) >= StrictVersion('1.4.14'):
