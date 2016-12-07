@@ -18,6 +18,10 @@ TEST_PROTOCOL_2 = [
     b'CONFIG cluster 0 138\r\n1\nhost|ip|port host||port\n\r\nEND\r\n',
 ]
 
+TEST_PROTOCOL_3 = [
+    b'VERSION 1.4.14 (Ubuntu)',
+    b'CONFIG cluster 0 138\r\n1\nhost|ip|port host||port\n\r\nEND\r\n',
+]
 
 @patch('django_elasticache.cluster_utils.Telnet')
 def test_happy_path(Telnet):
@@ -54,3 +58,20 @@ def test_prev_versions(Telnet):
         call(b'version\n'),
         call(b'get AmazonElastiCache:cluster\n'),
     ])
+
+
+@patch('django_elasticache.cluster_utils.Telnet')
+def test_ubuntu_protocol(Telnet):
+    client = Telnet.return_value
+    client.read_until.side_effect = TEST_PROTOCOL_3
+
+    try:
+        get_cluster_info('', 0)
+    except WrongProtocolData:
+        raise AssertionError('Raised WrongProtocolData with Ubuntu version.')
+
+    client.write.assert_has_calls([
+        call(b'version\n'),
+        call(b'config get cluster\n'),
+    ])
+
