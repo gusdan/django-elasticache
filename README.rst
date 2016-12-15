@@ -72,8 +72,6 @@ you will be connected to another node and will not able to get this item.
         }
     }
 
-::
-
 
 2. Memcached configured with all nodes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -95,8 +93,6 @@ add new nodes manually and don't forget update your app after all changes on AWS
         }
     }
 
-::
-
 
 3. Use django-elasticache
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -112,8 +108,6 @@ of all nodes and configure memcached to use all nodes.
             'LOCATION': 'cache-c.draaaf.cfg.use1.cache.amazonaws.com:11211',
         }
     }
-
-::
 
 
 Difference between setup with nodes list (django-elasticache) and
