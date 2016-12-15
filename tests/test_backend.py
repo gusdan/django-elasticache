@@ -91,7 +91,9 @@ def test_invalidate_cache(get_cluster_info):
         backend.get('key1', 'val')
     except Exception:
         pass
-    backend._local._client = None
+    #  invalidate cached client
+    container = getattr(backend, '_local', backend)
+    container._client = None
     try:
         backend.get('key1', 'val')
     except Exception:
