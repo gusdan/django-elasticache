@@ -47,7 +47,7 @@ class ElastiCache(PyLibMCCache):
                           ' in binary mode')
         else:
             params['BINARY'] = True  # patch params, set binary mode
-        if not 'OPTIONS' in params:
+        if 'OPTIONS' not in params:
             # set special 'behaviors' pylibmc attributes
             params['OPTIONS'] = {
                 'tcp_nodelay': True,
