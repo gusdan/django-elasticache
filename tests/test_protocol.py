@@ -23,6 +23,7 @@ TEST_PROTOCOL_3 = [
     b'CONFIG cluster 0 138\r\n1\nhost|ip|port host||port\n\r\nEND\r\n',
 ]
 
+
 @patch('django_elasticache.cluster_utils.Telnet')
 def test_happy_path(Telnet):
     client = Telnet.return_value
@@ -74,4 +75,3 @@ def test_ubuntu_protocol(Telnet):
         call(b'version\n'),
         call(b'config get cluster\n'),
     ])
-
