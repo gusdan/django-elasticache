@@ -17,7 +17,7 @@ class WrongProtocolData(ValueError):
             'Unexpected response {} for command {}'.format(response, cmd))
 
 
-def get_cluster_info(host, port):
+def get_cluster_info(host, port, timeout=3):
     """
     return dict with info about nodes in cluster and current version
     {
@@ -30,7 +30,7 @@ def get_cluster_info(host, port):
     """
     client = Telnet(host, int(port))
     client.write(b'version\n')
-    res = client.read_until(b'\r\n').strip()
+    res = client.read_until(b'\r\n', timeout).strip()
     version_list = res.split(b' ')
     if len(version_list) not in [2, 3] or version_list[0] != b'VERSION':
         raise WrongProtocolData('version', res)
@@ -40,8 +40,18 @@ def get_cluster_info(host, port):
     else:
         cmd = b'get AmazonElastiCache:cluster\n'
     client.write(cmd)
-    res = client.read_until(b'\n\r\nEND\r\n')
+    res = client.read_until(b'\n\r\nEND\r\n', timeout)
     client.close()
+
+    if res == 'ERROR\r\n':
+        return {
+            'version': version,
+            'nodes': [
+                '{}:{}'.format(smart_text(host),
+                               smart_text(port))
+            ]
+        }
+
     ls = list(filter(None, re.compile(br'\r?\n').split(res)))
     if len(ls) != 4:
         raise WrongProtocolData(cmd, res)

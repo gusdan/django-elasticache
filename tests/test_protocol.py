@@ -23,6 +23,11 @@ TEST_PROTOCOL_3 = [
     b'CONFIG cluster 0 138\r\n1\nhost|ip|port host||port\n\r\nEND\r\n',
 ]
 
+TEST_PROTOCOL_4 = [
+    b'VERSION 1.4.34',
+    b'ERROR\r\n',
+]
+
 
 @patch('django_elasticache.cluster_utils.Telnet')
 def test_happy_path(Telnet):
@@ -75,3 +80,16 @@ def test_ubuntu_protocol(Telnet):
         call(b'version\n'),
         call(b'config get cluster\n'),
     ])
+
+
+@patch('django_elasticache.cluster_utils.Telnet')
+def test_no_configuration_protocol_support(Telnet):
+    client = Telnet.return_value
+    client.read_until.side_effect = TEST_PROTOCOL_4
+    info = get_cluster_info('test', 0)
+    client.write.assert_has_calls([
+        call(b'version\n'),
+        call(b'config get cluster\n'),
+    ])
+    eq_(info['version'], '1.4.34')
+    eq_(info['nodes'], ['test:0'])
