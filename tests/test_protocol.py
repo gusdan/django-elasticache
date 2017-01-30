@@ -8,31 +8,44 @@ else:
     from unittest.mock import patch, call, MagicMock
 
 
-TEST_PROTOCOL_1 = [
+TEST_PROTOCOL_1_READ_UNTIL = [
     b'VERSION 1.4.14',
-    b'CONFIG cluster 0 138\r\n1\nhost|ip|port host||port\n\r\nEND\r\n',
 ]
 
-TEST_PROTOCOL_2 = [
+TEST_PROTOCOL_1_EXPECT = [
+    (0, None, b'CONFIG cluster 0 138\r\n1\nhost|ip|port host||port\n\r\nEND\r\n'),  # NOQA
+]
+
+TEST_PROTOCOL_2_READ_UNTIL = [
     b'VERSION 1.4.13',
-    b'CONFIG cluster 0 138\r\n1\nhost|ip|port host||port\n\r\nEND\r\n',
 ]
 
-TEST_PROTOCOL_3 = [
+TEST_PROTOCOL_2_EXPECT = [
+    (0, None, b'CONFIG cluster 0 138\r\n1\nhost|ip|port host||port\n\r\nEND\r\n'),  # NOQA
+]
+
+TEST_PROTOCOL_3_READ_UNTIL = [
     b'VERSION 1.4.14 (Ubuntu)',
-    b'CONFIG cluster 0 138\r\n1\nhost|ip|port host||port\n\r\nEND\r\n',
 ]
 
-TEST_PROTOCOL_4 = [
+TEST_PROTOCOL_3_EXPECT = [
+    (0, None, b'CONFIG cluster 0 138\r\n1\nhost|ip|port host||port\n\r\nEND\r\n'),  # NOQA
+]
+
+TEST_PROTOCOL_4_READ_UNTIL = [
     b'VERSION 1.4.34',
-    b'ERROR\r\n',
+]
+
+TEST_PROTOCOL_4_EXPECT = [
+    (0, None, b'ERROR\r\n'),
 ]
 
 
 @patch('django_elasticache.cluster_utils.Telnet')
 def test_happy_path(Telnet):
     client = Telnet.return_value
-    client.read_until.side_effect = TEST_PROTOCOL_1
+    client.read_until.side_effect = TEST_PROTOCOL_1_READ_UNTIL
+    client.expect.side_effect = TEST_PROTOCOL_1_EXPECT
     info = get_cluster_info('', 0)
     eq_(info['version'], 1)
     eq_(info['nodes'], ['ip:port', 'host:port'])
@@ -47,7 +60,8 @@ def test_bad_protocol():
 @patch('django_elasticache.cluster_utils.Telnet')
 def test_last_versions(Telnet):
     client = Telnet.return_value
-    client.read_until.side_effect = TEST_PROTOCOL_1
+    client.read_until.side_effect = TEST_PROTOCOL_1_READ_UNTIL
+    client.expect.side_effect = TEST_PROTOCOL_1_EXPECT
     get_cluster_info('', 0)
     client.write.assert_has_calls([
         call(b'version\n'),
@@ -58,7 +72,8 @@ def test_last_versions(Telnet):
 @patch('django_elasticache.cluster_utils.Telnet')
 def test_prev_versions(Telnet):
     client = Telnet.return_value
-    client.read_until.side_effect = TEST_PROTOCOL_2
+    client.read_until.side_effect = TEST_PROTOCOL_2_READ_UNTIL
+    client.expect.side_effect = TEST_PROTOCOL_2_EXPECT
     get_cluster_info('', 0)
     client.write.assert_has_calls([
         call(b'version\n'),
@@ -69,7 +84,8 @@ def test_prev_versions(Telnet):
 @patch('django_elasticache.cluster_utils.Telnet')
 def test_ubuntu_protocol(Telnet):
     client = Telnet.return_value
-    client.read_until.side_effect = TEST_PROTOCOL_3
+    client.read_until.side_effect = TEST_PROTOCOL_3_READ_UNTIL
+    client.expect.side_effect = TEST_PROTOCOL_3_EXPECT
 
     try:
         get_cluster_info('', 0)
@@ -85,7 +101,8 @@ def test_ubuntu_protocol(Telnet):
 @patch('django_elasticache.cluster_utils.Telnet')
 def test_no_configuration_protocol_support(Telnet):
     client = Telnet.return_value
-    client.read_until.side_effect = TEST_PROTOCOL_4
+    client.read_until.side_effect = TEST_PROTOCOL_4_READ_UNTIL
+    client.expect.side_effect = TEST_PROTOCOL_4_EXPECT
     info = get_cluster_info('test', 0)
     client.write.assert_has_calls([
         call(b'version\n'),

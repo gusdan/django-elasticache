@@ -40,10 +40,13 @@ def get_cluster_info(host, port, timeout=3):
     else:
         cmd = b'get AmazonElastiCache:cluster\n'
     client.write(cmd)
-    res = client.read_until(b'\n\r\nEND\r\n', timeout)
+    regex_index, match_object, res = client.expect([
+        re.compile(b'\n\r\nEND\r\n'),
+        re.compile(b'ERROR\r\n')
+    ], timeout)
     client.close()
 
-    if res == 'ERROR\r\n':
+    if res == b'ERROR\r\n':
         return {
             'version': version,
             'nodes': [
