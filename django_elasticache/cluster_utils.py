@@ -17,7 +17,7 @@ class WrongProtocolData(ValueError):
             'Unexpected response {} for command {}'.format(response, cmd))
 
 
-def get_cluster_info(host, port, timeout=3):
+def get_cluster_info(host, port, ignore_cluster_errors=False, timeout=3):
     """
     return dict with info about nodes in cluster and current version
     {
@@ -46,7 +46,7 @@ def get_cluster_info(host, port, timeout=3):
     ], timeout)
     client.close()
 
-    if res == b'ERROR\r\n':
+    if res == b'ERROR\r\n' and ignore_cluster_errors:
         return {
             'version': version,
             'nodes': [

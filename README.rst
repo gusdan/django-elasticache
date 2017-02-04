@@ -36,10 +36,13 @@ Your cache backend should look something like this::
         'default': {
             'BACKEND': 'django_elasticache.memcached.ElastiCache',
             'LOCATION': 'cache-c.draaaf.cfg.use1.cache.amazonaws.com:11211',
+            'OPTIONS' {
+                'IGNORE_CLUSTER_ERRORS': [True,False],
+            },
         }
     }
 
-By the first call to cache it connects to cluster (using LOCATION param),
+By the first call to cache it connects to cluster (using ``LOCATION`` param),
 gets list of all nodes and setup pylibmc client using full
 list of nodes. As result your cache will work with all nodes in cluster and
 automatically detect new nodes in cluster. List of nodes are stored in class-level
@@ -47,6 +50,10 @@ cached, so any changes in cluster take affect only after restart of working proc
 But if you're using gunicorn or mod_wsgi you usually have max_request settings which
 restart process after some count of processed requests, so auto discovery will work
 fine.
+
+The ``IGNORE_CLUSTER_ERRORS`` option is useful when ``LOCATION`` doesn't have support
+for ``config get cluster``. When set to ``True``, and ``config get cluster`` fails,
+it returns a list of a single node with the same endpoint supplied to ``LOCATION``.
 
 Django-elasticache changes default pylibmc params to increase performance.
 

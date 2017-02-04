@@ -20,6 +20,7 @@ def test_patch_params():
     eq_(params['BINARY'], True)
     eq_(params['OPTIONS']['tcp_nodelay'], True)
     eq_(params['OPTIONS']['ketama'], True)
+    eq_(params['OPTIONS']['IGNORE_CLUSTER_ERRORS'], False)
 
 
 @raises(Exception)
@@ -47,7 +48,7 @@ def test_split_servers(get_cluster_info):
     }
     backend._lib.Client = Mock()
     assert backend._cache
-    get_cluster_info.assert_called_once_with('h', '0')
+    get_cluster_info.assert_called_once_with('h', '0', False)
     backend._lib.Client.assert_called_once_with(servers)
 
 
@@ -70,7 +71,7 @@ def test_node_info_cache(get_cluster_info):
     eq_(backend._cache.get.call_count, 2)
     eq_(backend._cache.set.call_count, 2)
 
-    get_cluster_info.assert_called_once_with('h', '0')
+    get_cluster_info.assert_called_once_with('h', '0', False)
 
 
 @patch('django.conf.settings', global_settings)
