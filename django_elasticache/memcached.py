@@ -54,8 +54,7 @@ class ElastiCache(PyLibMCCache):
             # set special 'behaviors' pylibmc attributes
             params['OPTIONS'] = {
                 'tcp_nodelay': True,
-                'ketama': True,
-                'IGNORE_CLUSTER_ERRORS': False,
+                'ketama': True
             }
 
     def clear_cluster_nodes_cache(self):

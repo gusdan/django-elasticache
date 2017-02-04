@@ -20,7 +20,6 @@ def test_patch_params():
     eq_(params['BINARY'], True)
     eq_(params['OPTIONS']['tcp_nodelay'], True)
     eq_(params['OPTIONS']['ketama'], True)
-    eq_(params['OPTIONS']['IGNORE_CLUSTER_ERRORS'], False)
 
 
 @raises(Exception)

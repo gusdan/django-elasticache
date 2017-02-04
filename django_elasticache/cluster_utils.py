@@ -17,7 +17,7 @@ class WrongProtocolData(ValueError):
             'Unexpected response {} for command {}'.format(response, cmd))
 
 
-def get_cluster_info(host, port, ignore_cluster_errors=False, timeout=3):
+def get_cluster_info(host, port, ignore_cluster_errors=False):
     """
     return dict with info about nodes in cluster and current version
     {
@@ -30,7 +30,7 @@ def get_cluster_info(host, port, ignore_cluster_errors=False, timeout=3):
     """
     client = Telnet(host, int(port))
     client.write(b'version\n')
-    res = client.read_until(b'\r\n', timeout).strip()
+    res = client.read_until(b'\r\n').strip()
     version_list = res.split(b' ')
     if len(version_list) not in [2, 3] or version_list[0] != b'VERSION':
         raise WrongProtocolData('version', res)
@@ -43,7 +43,7 @@ def get_cluster_info(host, port, ignore_cluster_errors=False, timeout=3):
     regex_index, match_object, res = client.expect([
         re.compile(b'\n\r\nEND\r\n'),
         re.compile(b'ERROR\r\n')
-    ], timeout)
+    ])
     client.close()
 
     if res == b'ERROR\r\n' and ignore_cluster_errors:
