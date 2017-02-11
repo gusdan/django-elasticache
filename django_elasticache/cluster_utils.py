@@ -17,7 +17,7 @@ class WrongProtocolData(ValueError):
             'Unexpected response {} for command {}'.format(response, cmd))
 
 
-def get_cluster_info(host, port):
+def get_cluster_info(host, port, ignore_cluster_errors=False):
     """
     return dict with info about nodes in cluster and current version
     {
@@ -40,8 +40,21 @@ def get_cluster_info(host, port):
     else:
         cmd = b'get AmazonElastiCache:cluster\n'
     client.write(cmd)
-    res = client.read_until(b'\n\r\nEND\r\n')
+    regex_index, match_object, res = client.expect([
+        re.compile(b'\n\r\nEND\r\n'),
+        re.compile(b'ERROR\r\n')
+    ])
     client.close()
+
+    if res == b'ERROR\r\n' and ignore_cluster_errors:
+        return {
+            'version': version,
+            'nodes': [
+                '{}:{}'.format(smart_text(host),
+                               smart_text(port))
+            ]
+        }
+
     ls = list(filter(None, re.compile(br'\r?\n').split(res)))
     if len(ls) != 4:
         raise WrongProtocolData(cmd, res)

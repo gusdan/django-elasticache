@@ -38,6 +38,9 @@ class ElastiCache(PyLibMCCache):
             raise InvalidCacheBackendError(
                 'Server configuration should be in format IP:port')
 
+        self._ignore_cluster_errors = self._options.get(
+            'IGNORE_CLUSTER_ERRORS', False)
+
     def update_params(self, params):
         """
         update connection params to maximize performance
@@ -67,7 +70,8 @@ class ElastiCache(PyLibMCCache):
             server, port = self._servers[0].split(':')
             try:
                 self._cluster_nodes_cache = (
-                    get_cluster_info(server, port)['nodes'])
+                    get_cluster_info(server, port,
+                                     self._ignore_cluster_errors)['nodes'])
             except (socket.gaierror, socket.timeout) as err:
                 raise Exception('Cannot connect to cluster {} ({})'.format(
                     self._servers[0], err
