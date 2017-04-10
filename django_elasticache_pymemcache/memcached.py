@@ -77,7 +77,7 @@ class PyMemcacheElastiCache(BaseMemcachedCache):
 
     @property
     def _cache(self):
-        return self._lib.Client(self.get_cluster_nodes())
+        return self._lib.Client(self.get_cluster_nodes(), ignore_exc=self._ignore_cluster_errors)
 
     @invalidate_cache_after_error
     def get(self, *args, **kwargs):
