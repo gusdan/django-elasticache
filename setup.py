@@ -1,21 +1,21 @@
 from setuptools import setup
 
-import django_elasticache
+import django_elasticache_pymemcache
 
 
 setup(
-    name='django-elasticache',
+    name='django-elasticache-pymemcache',
     version=django_elasticache.__version__,
     description='Django cache backend for Amazon ElastiCache (memcached)',
     long_description=open('README.rst').read(),
     author='Danil Gusev',
     platforms='any',
-    author_email='danil.gusev@gmail.com',
-    url='http://github.com/gusdan/django-elasticache',
+    author_email='info@uncovertruth.jp',
+    url='http://github.com/uncovertruth/django-elasticache-pymemcache',
     license='MIT',
-    keywords='elasticache amazon cache pylibmc memcached aws',
+    keywords='elasticache amazon cache pymemcache memcached aws',
     packages=['django_elasticache'],
-    install_requires=['pylibmc', 'Django>=1.3'],
+    install_requires=['pymemcache', 'Django>=1.7'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
