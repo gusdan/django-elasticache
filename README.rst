@@ -1,46 +1,54 @@
-# django-elastipymemcache
+=======================
+django-elastipymemcache
+=======================
+
+:Info: Simple Django cache backend for Amazon ElastiCache (memcached based).
+:Author: UNCOVER TRUTH Inc. <develop@uncovertruth.co.jp>
+:Copyright: © UNCOVER TRUTH Inc.
+:Date: 2017-04-11
+:Version: 0.0.1
+
+.. index: README
+.. image:: https://travis-ci.org/uncovertruth/django-elastipymemcache.svg?branch=master
+    :target: https://travis-ci.org/uncovertruth/django-elastipymemcache
+
+Purpose
+-------
 
 Simple Django cache backend for Amazon ElastiCache (memcached based). It uses
 [pymemcache](https://github.com/pinterest/pymemcache) and sets up a connection to each
 node in the cluster using
-[auto discovery](http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/AutoDiscovery.html)
+[auto discovery](http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/AutoDiscovery.html).
+Originally forked from [django-elasticache](https://github.com/gusdan/django-elasticache).
 
-## Requirements
+Requirements
+------------
 
 * pymemcache
-* Django >= 1.8
+* Django>=1.8
 
-It was written and tested on Python 2.7 and 3.5.
+Installation
+------------
 
-## Installation
+Get it from [pypi](http://pypi.python.org/pypi/django-elastipymemcache)::
 
-Get it from [pypi](http://pypi.python.org/pypi/django-elastipymemcache)
+    pip install django-elastipymemcache
 
-```bash
-pip install django-elastipymemcache
-```
+Usage
+-----
 
-## Usage
+Your cache backend should look something like this::
 
-Your cache backend should look something like this
-
-```python
-CACHES = {
-    'default': {
-        'BACKEND': 'django_elastipymemcache.memcached.ElastiPyMemCache',
-        'LOCATION': '[configuration endpoint].com:11211',
+    CACHES = {
+        'default': {
+            'BACKEND': 'django_elastipymemcache.memcached.ElastiPyMemCache',
+            'LOCATION': '[configuration endpoint].com:11211',
+        }
     }
-}
-```
 
-## Testing
+Testing
+-------
 
-Run the tests like this
+Run the tests like this::
 
-```bash
-nosetests
-```
-
-## Thx
-
-Originally forked from [django-elasticache](https://github.com/gusdan/django-elasticache)
+    nosetests

@@ -13,7 +13,7 @@ setup(
     description='Django cache backend for Amazon ElastiCache (memcached)',
     keywords='elasticache amazon cache pymemcache memcached aws',
     author='UNCOVER TRUTH Inc.',
-    author_email='dev@uncovertruth.co.jp',
+    author_email='develop@uncovertruth.co.jp',
     url='http://github.com/uncovertruth/django-elastipymemcache',
     license='MIT',
     long_description=io.open('README.rst').read(),
