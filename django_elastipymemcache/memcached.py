@@ -71,7 +71,8 @@ class ElastiPyMemCache(BaseMemcachedCache):
     @property
     def _cache(self):
         if getattr(self, '_client', None) is None:
-            self._client = self._lib.Client(self.get_cluster_nodes(), **self._options)
+            self._client = self._lib.Client(
+                self.get_cluster_nodes(), **self._options)
         return self._client
 
     @invalidate_cache_after_error

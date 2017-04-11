@@ -1,30 +1,47 @@
-from setuptools import setup
+#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
+
+import io
+
+from setuptools import find_packages, setup
 
 import django_elastipymemcache
-
 
 setup(
     name='django-elastipymemcache',
     version=django_elastipymemcache.__version__,
     description='Django cache backend for Amazon ElastiCache (memcached)',
-    long_description=open('README.md').read(),
-    author='Danil Gusev',
-    platforms='any',
-    author_email='info@uncovertruth.jp',
+    keywords='elasticache amazon cache pymemcache memcached aws',
+    author='UNCOVER TRUTH Inc.',
+    author_email='develop@uncovertruth.co.jp',
     url='http://github.com/uncovertruth/django-elastipymemcache',
     license='MIT',
-    keywords='elasticache amazon cache pymemcache memcached aws',
-    packages=['django_elastipymemcache'],
-    install_requires=['pymemcache', 'Django>=1.8'],
+    long_description=io.open('README.rst').read(),
+    platforms='any',
+    zip_safe=False,
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
-        'Environment :: Web Environment :: Mozilla',
-        'Framework :: Django',
+        'Framework :: Django :: 1.8',
+        'Framework :: Django :: 1.9',
+        'Framework :: Django :: 1.10',
+        'Framework :: Django :: 1.11',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: BSD License',
+        'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
-        'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Topic :: Software Development :: Libraries :: Python Modules',
+    ],
+    packages=find_packages(exclude=('tests',)),
+    include_package_data=True,
+    install_requires=[
+        'pymemcache',
+        'Django>=1.8',
     ],
 )

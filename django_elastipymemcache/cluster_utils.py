@@ -1,10 +1,11 @@
 """
 utils for discovery cluster
 """
-from distutils.version import StrictVersion
-from django.utils.encoding import smart_text
 import re
+from distutils.version import StrictVersion
 from telnetlib import Telnet
+
+from django.utils.encoding import smart_text
 
 
 class WrongProtocolData(ValueError):

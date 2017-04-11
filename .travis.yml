@@ -42,6 +42,8 @@ matrix:
     env: TOXENV=isort
   - python: 3.6
     env: TOXENV=readme
+  - python: 3.6
+    env: TOXENV=check-manifest
   allow_failures:
     - env: TOX_ENV=py35-djdev
     - env: TOX_ENV=py36-djdev

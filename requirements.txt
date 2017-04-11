@@ -1,0 +1,6 @@
+nose
+coverage
+flake8
+isort
+readme_renderer
+check-manifest

@@ -1,6 +1,8 @@
-from django.conf import global_settings, settings
-from nose.tools import eq_, raises
 import sys
+
+from django.conf import global_settings, settings
+from nose.tools import eq_
+
 if sys.version < '3':
     from mock import patch, Mock
 else:
