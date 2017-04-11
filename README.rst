@@ -11,6 +11,8 @@ django-elastipymemcache
 .. index: README
 .. image:: https://travis-ci.org/uncovertruth/django-elastipymemcache.svg?branch=master
     :target: https://travis-ci.org/uncovertruth/django-elastipymemcache
+.. image:: https://codecov.io/gh/uncovertruth/django-elastipymemcache/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/uncovertruth/django-elastipymemcache
 
 Purpose
 -------
