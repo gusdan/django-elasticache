@@ -50,8 +50,7 @@ def get_cluster_info(host, port, ignore_cluster_errors=False):
         return {
             'version': version,
             'nodes': [
-                '{}:{}'.format(smart_text(host),
-                               smart_text(port))
+                (smart_text(host), int(port))
             ]
         }
 
@@ -67,8 +66,7 @@ def get_cluster_info(host, port, ignore_cluster_errors=False):
     try:
         for node in ls[2].split(b' '):
             host, ip, port = node.split(b'|')
-            nodes.append('{}:{}'.format(smart_text(ip or host),
-                                        smart_text(port)))
+            nodes.append((smart_text(ip or host), int(port)))
     except ValueError:
         raise WrongProtocolData(cmd, res)
     return {
