@@ -32,6 +32,7 @@ def get_cluster_info(host, port, ignore_cluster_errors=False):
     client.write(b'version\n')
     res = client.read_until(b'\r\n').strip()
     version_list = res.split(b' ')
+    print(version_list)
     if len(version_list) not in [2, 3] or version_list[0] != b'VERSION':
         raise WrongProtocolData('version', res)
     version = version_list[1]
@@ -49,7 +50,9 @@ def get_cluster_info(host, port, ignore_cluster_errors=False):
     if res == b'ERROR\r\n' and ignore_cluster_errors:
         return {
             'version': version,
-            'nodes': []
+            'nodes': [
+                (smart_text(host), int(port))
+            ]
         }
 
     ls = list(filter(None, re.compile(br'\r?\n').split(res)))
@@ -64,8 +67,7 @@ def get_cluster_info(host, port, ignore_cluster_errors=False):
     try:
         for node in ls[2].split(b' '):
             host, ip, port = node.split(b'|')
-            nodes.append('{}:{}'.format(smart_text(ip or host),
-                                        smart_text(port)))
+            nodes.append((smart_text(ip or host), int(port)))
     except ValueError:
         raise WrongProtocolData(cmd, res)
     return {

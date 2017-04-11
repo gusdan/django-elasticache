@@ -49,35 +49,30 @@ class ElastiPyMemCache(BaseMemcachedCache):
 
     def clear_cluster_nodes_cache(self):
         """clear internal cache with list of nodes in cluster"""
-        if hasattr(self, '_cluster_nodes_cache'):
-            del self._cluster_nodes_cache
+        if hasattr(self, '_client'):
+            del self._client
 
     def get_cluster_nodes(self):
         """
         return list with all nodes in cluster
         """
-        if not hasattr(self, '_cluster_nodes_cache'):
-            server, port = self._servers[0].split(':')
-            try:
-                nodes = get_cluster_info(
-                    server,
-                    port,
-                    self._ignore_cluster_errors
-                )['nodes']
-                self._cluster_nodes_cache = [
-                    (i.split(':')[0], int(i.split(':')[1]))
-                    for i in nodes
-                ]
-                print(self._cluster_nodes_cache)
-            except (socket.gaierror, socket.timeout) as err:
-                raise Exception('Cannot connect to cluster {} ({})'.format(
-                    self._servers[0], err
-                ))
-        return self._cluster_nodes_cache
+        server, port = self._servers[0].split(':')
+        try:
+            return get_cluster_info(
+                server,
+                port,
+                self._ignore_cluster_errors
+            )['nodes']
+        except (socket.gaierror, socket.timeout) as err:
+            raise Exception('Cannot connect to cluster {} ({})'.format(
+                self._servers[0], err
+            ))
 
     @property
     def _cache(self):
-        return self._lib.Client(self.get_cluster_nodes(), **self._options)
+        if getattr(self, '_client', None) is None:
+            self._client = self._lib.Client(self.get_cluster_nodes(), **self._options)
+        return self._client
 
     @invalidate_cache_after_error
     def get(self, *args, **kwargs):
