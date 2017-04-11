@@ -32,7 +32,6 @@ def get_cluster_info(host, port, ignore_cluster_errors=False):
     client.write(b'version\n')
     res = client.read_until(b'\r\n').strip()
     version_list = res.split(b' ')
-    print(version_list)
     if len(version_list) not in [2, 3] or version_list[0] != b'VERSION':
         raise WrongProtocolData('version', res)
     version = version_list[1]
