@@ -7,7 +7,7 @@ from functools import wraps
 from django.core.cache import InvalidCacheBackendError
 from django.core.cache.backends.memcached import BaseMemcachedCache
 
-from . import client as pymemcache_client
+from . import client as pyMemcache_client
 from .cluster_utils import get_cluster_info
 
 
@@ -25,16 +25,16 @@ def invalidate_cache_after_error(f):
     return wrapper
 
 
-class PyMemcacheElastiCache(BaseMemcachedCache):
+class ElastiPyMemCache(BaseMemcachedCache):
     """
     backend for Amazon ElastiCache (memcached) with auto discovery mode
-    it used pymemcache
+    it used pyMemcache
     """
     def __init__(self, server, params):
-        super(PyMemcacheElastiCache, self).__init__(
+        super(ElastiPyMemCache, self).__init__(
             server,
             params,
-            library=pymemcache_client,
+            library=pyMemcache_client,
             value_not_found_exception=ValueError)
         if len(self._servers) > 1:
             raise InvalidCacheBackendError(
@@ -64,7 +64,7 @@ class PyMemcacheElastiCache(BaseMemcachedCache):
                     port,
                     self._ignore_cluster_errors
                 )['nodes']
-                self._cluster_nodes_cache = [ 
+                self._cluster_nodes_cache = [
                     (i.split(':')[0], int(i.split(':')[1]))
                     for i in nodes
                 ]
@@ -81,20 +81,20 @@ class PyMemcacheElastiCache(BaseMemcachedCache):
 
     @invalidate_cache_after_error
     def get(self, *args, **kwargs):
-        return super(PyMemcacheElastiCache, self).get(*args, **kwargs)
+        return super(ElastiPyMemCache, self).get(*args, **kwargs)
 
     @invalidate_cache_after_error
     def get_many(self, *args, **kwargs):
-        return super(PyMemcacheElastiCache, self).get_many(*args, **kwargs)
+        return super(ElastiPyMemCache, self).get_many(*args, **kwargs)
 
     @invalidate_cache_after_error
     def set(self, *args, **kwargs):
-        return super(PyMemcacheElastiCache, self).set(*args, **kwargs)
+        return super(ElastiPyMemCache, self).set(*args, **kwargs)
 
     @invalidate_cache_after_error
     def set_many(self, *args, **kwargs):
-        return super(PyMemcacheElastiCache, self).set_many(*args, **kwargs)
+        return super(ElastiPyMemCache, self).set_many(*args, **kwargs)
 
     @invalidate_cache_after_error
     def delete(self, *args, **kwargs):
-        return super(PyMemcacheElastiCache, self).delete(*args, **kwargs)
+        return super(ElastiPyMemCache, self).delete(*args, **kwargs)
