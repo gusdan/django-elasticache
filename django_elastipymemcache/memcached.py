@@ -45,7 +45,7 @@ class ElastiPyMemCache(BaseMemcachedCache):
                 'Server configuration should be in format IP:port')
 
         self._ignore_cluster_errors = self._options.get(
-            'IGNORE_CLUSTER_ERRORS', False)
+            'ignore_exc', False)
 
     def clear_cluster_nodes_cache(self):
         """clear internal cache with list of nodes in cluster"""
@@ -77,7 +77,7 @@ class ElastiPyMemCache(BaseMemcachedCache):
 
     @property
     def _cache(self):
-        return self._lib.Client(self.get_cluster_nodes(), ignore_exc=self._ignore_cluster_errors)
+        return self._lib.Client(self.get_cluster_nodes(), **self._options)
 
     @invalidate_cache_after_error
     def get(self, *args, **kwargs):
