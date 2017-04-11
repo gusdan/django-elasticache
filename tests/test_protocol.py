@@ -87,10 +87,10 @@ def test_ubuntu_protocol(Telnet):
     client.read_until.side_effect = TEST_PROTOCOL_3_READ_UNTIL
     client.expect.side_effect = TEST_PROTOCOL_3_EXPECT
 
-    #try:
-    #    get_cluster_info('', 0)
-    #except WrongProtocolData:
-    #    raise AssertionError('Raised WrongProtocolData with Ubuntu version.')
+    # try:
+    #     get_cluster_info('', 0)
+    # except WrongProtocolData:
+    #     raise AssertionError('Raised WrongProtocolData with Ubuntu version.')
     get_cluster_info('', 0)
 
     client.write.assert_has_calls([
