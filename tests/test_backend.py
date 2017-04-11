@@ -14,7 +14,7 @@ global_settings.configured = True
 
 @patch('django.conf.settings', global_settings)
 def test_patch_params():
-    from django_elasticache.memcached import ElastiCache
+    from django_elastipymemcache.memcached import ElastiCache
     params = {}
     ElastiCache('qew:12', params)
     eq_(params['BINARY'], True)
@@ -25,21 +25,21 @@ def test_patch_params():
 @raises(Exception)
 @patch('django.conf.settings', global_settings)
 def test_wrong_params():
-    from django_elasticache.memcached import ElastiCache
+    from django_elastipymemcache.memcached import ElastiCache
     ElastiCache('qew', {})
 
 
 @raises(Warning)
 @patch('django.conf.settings', global_settings)
 def test_wrong_params_warning():
-    from django_elasticache.memcached import ElastiCache
+    from django_elastipymemcache.memcached import ElastiCache
     ElastiCache('qew', {'BINARY': False})
 
 
 @patch('django.conf.settings', global_settings)
-@patch('django_elasticache.memcached.get_cluster_info')
+@patch('django_elastipymemcache.memcached.get_cluster_info')
 def test_split_servers(get_cluster_info):
-    from django_elasticache.memcached import ElastiCache
+    from django_elastipymemcache.memcached import ElastiCache
     backend = ElastiCache('h:0', {})
     servers = ['h1:p', 'h2:p']
     get_cluster_info.return_value = {
@@ -52,9 +52,9 @@ def test_split_servers(get_cluster_info):
 
 
 @patch('django.conf.settings', global_settings)
-@patch('django_elasticache.memcached.get_cluster_info')
+@patch('django_elastipymemcache.memcached.get_cluster_info')
 def test_node_info_cache(get_cluster_info):
-    from django_elasticache.memcached import ElastiCache
+    from django_elastipymemcache.memcached import ElastiCache
     servers = ['h1:p', 'h2:p']
     get_cluster_info.return_value = {
         'nodes': servers
@@ -74,9 +74,9 @@ def test_node_info_cache(get_cluster_info):
 
 
 @patch('django.conf.settings', global_settings)
-@patch('django_elasticache.memcached.get_cluster_info')
+@patch('django_elastipymemcache.memcached.get_cluster_info')
 def test_invalidate_cache(get_cluster_info):
-    from django_elasticache.memcached import ElastiCache
+    from django_elastipymemcache.memcached import ElastiCache
     servers = ['h1:p', 'h2:p']
     get_cluster_info.return_value = {
         'nodes': servers

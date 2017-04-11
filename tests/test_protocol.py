@@ -1,4 +1,4 @@
-from django_elasticache.cluster_utils import (
+from django_elastipymemcache.cluster_utils import (
     get_cluster_info, WrongProtocolData)
 from nose.tools import eq_, raises
 import sys
@@ -41,7 +41,7 @@ TEST_PROTOCOL_4_EXPECT = [
 ]
 
 
-@patch('django_elasticache.cluster_utils.Telnet')
+@patch('django_elastipymemcache.cluster_utils.Telnet')
 def test_happy_path(Telnet):
     client = Telnet.return_value
     client.read_until.side_effect = TEST_PROTOCOL_1_READ_UNTIL
@@ -52,12 +52,12 @@ def test_happy_path(Telnet):
 
 
 @raises(WrongProtocolData)
-@patch('django_elasticache.cluster_utils.Telnet', MagicMock())
+@patch('django_elastipymemcache.cluster_utils.Telnet', MagicMock())
 def test_bad_protocol():
     get_cluster_info('', 0)
 
 
-@patch('django_elasticache.cluster_utils.Telnet')
+@patch('django_elastipymemcache.cluster_utils.Telnet')
 def test_last_versions(Telnet):
     client = Telnet.return_value
     client.read_until.side_effect = TEST_PROTOCOL_1_READ_UNTIL
@@ -69,7 +69,7 @@ def test_last_versions(Telnet):
     ])
 
 
-@patch('django_elasticache.cluster_utils.Telnet')
+@patch('django_elastipymemcache.cluster_utils.Telnet')
 def test_prev_versions(Telnet):
     client = Telnet.return_value
     client.read_until.side_effect = TEST_PROTOCOL_2_READ_UNTIL
@@ -81,7 +81,7 @@ def test_prev_versions(Telnet):
     ])
 
 
-@patch('django_elasticache.cluster_utils.Telnet')
+@patch('django_elastipymemcache.cluster_utils.Telnet')
 def test_ubuntu_protocol(Telnet):
     client = Telnet.return_value
     client.read_until.side_effect = TEST_PROTOCOL_3_READ_UNTIL
@@ -98,7 +98,7 @@ def test_ubuntu_protocol(Telnet):
     ])
 
 
-@patch('django_elasticache.cluster_utils.Telnet')
+@patch('django_elastipymemcache.cluster_utils.Telnet')
 def test_no_configuration_protocol_support_with_errors_ignored(Telnet):
     client = Telnet.return_value
     client.read_until.side_effect = TEST_PROTOCOL_4_READ_UNTIL
@@ -113,7 +113,7 @@ def test_no_configuration_protocol_support_with_errors_ignored(Telnet):
 
 
 @raises(WrongProtocolData)
-@patch('django_elasticache.cluster_utils.Telnet')
+@patch('django_elastipymemcache.cluster_utils.Telnet')
 def test_no_configuration_protocol_support_with_errors(Telnet):
     client = Telnet.return_value
     client.read_until.side_effect = TEST_PROTOCOL_4_READ_UNTIL

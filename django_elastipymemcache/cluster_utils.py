@@ -49,10 +49,7 @@ def get_cluster_info(host, port, ignore_cluster_errors=False):
     if res == b'ERROR\r\n' and ignore_cluster_errors:
         return {
             'version': version,
-            'nodes': [
-                '{}:{}'.format(smart_text(host),
-                               smart_text(port))
-            ]
+            'nodes': []
         }
 
     ls = list(filter(None, re.compile(br'\r?\n').split(res)))
