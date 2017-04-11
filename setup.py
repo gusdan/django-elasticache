@@ -1,29 +1,24 @@
-from setuptools import setup
+#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
+
+import io
+
+from setuptools import find_packages, setup
 
 import django_elastipymemcache
-
 
 setup(
     name='django-elastipymemcache',
     version=django_elastipymemcache.__version__,
-    url='http://github.com/uncovertruth/django-elastipymemcache',
+    description='Django cache backend for Amazon ElastiCache (memcached)',
+    keywords='elasticache amazon cache pymemcache memcached aws',
     author='UNCOVER TRUTH Inc.',
     author_email='dev@uncovertruth.co.jp',
-    description='Django cache backend for Amazon ElastiCache (memcached)',
-    long_description=open('README.md').read(),
-    keywords='elasticache amazon cache pymemcache memcached aws',
+    url='http://github.com/uncovertruth/django-elastipymemcache',
     license='MIT',
-    packages=[
-        'django_elastipymemcache',
-    ],
-    install_requires=[
-        'pymemcache',
-        'Django>=1.8',
-    ],
-    extras_require={
-        'dev': ['check-manifest'],
-        'test': ['nose', 'coverage', 'flake8', 'isort', 'readme_renderer'],
-    },
+    long_description=io.open('README.rst').read(),
+    platforms='any',
+    zip_safe=False,
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
@@ -42,5 +37,11 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Topic :: Software Development :: Libraries :: Python Modules',
+    ],
+    packages=find_packages(exclude=('tests',)),
+    include_package_data=True,
+    install_requires=[
+        'pymemcache',
+        'Django>=1.8',
     ],
 )
