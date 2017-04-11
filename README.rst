@@ -18,10 +18,10 @@ Purpose
 -------
 
 Simple Django cache backend for Amazon ElastiCache (memcached based). It uses
-[pymemcache](https://github.com/pinterest/pymemcache) and sets up a connection to each
+`pymemcache <https://github.com/pinterest/pymemcache>`_ and sets up a connection to each
 node in the cluster using
-[auto discovery](http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/AutoDiscovery.html).
-Originally forked from [django-elasticache](https://github.com/gusdan/django-elasticache).
+`auto discovery <http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/AutoDiscovery.html>`_.
+Originally forked from `django-elasticache <https://github.com/gusdan/django-elasticache>`_.
 
 Requirements
 ------------
@@ -32,7 +32,7 @@ Requirements
 Installation
 ------------
 
-Get it from [pypi](http://pypi.python.org/pypi/django-elastipymemcache)::
+Get it from `pypix <http://pypi.python.org/pypi/django-elastipymemcache>`_::
 
     pip install django-elastipymemcache
 
