@@ -1,9 +1,9 @@
 # django-elastipymemcache
 
 Simple Django cache backend for Amazon ElastiCache (memcached based). It uses
-[pymemcache](https://github.com/pinterest/pymemcache>) and sets up a connection to each
+[pymemcache](https://github.com/pinterest/pymemcache) and sets up a connection to each
 node in the cluster using
-[auto discovery](http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/AutoDiscovery.html>)
+[auto discovery](http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/AutoDiscovery.html)
 
 ## Requirements
 
