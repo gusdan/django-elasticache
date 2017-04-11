@@ -2,7 +2,7 @@ import sys
 
 from django_elastipymemcache.cluster_utils import (
     WrongProtocolData,
-    get_cluster_info
+    get_cluster_info,
 )
 from nose.tools import eq_, raises
 
