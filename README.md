@@ -8,7 +8,7 @@ node in the cluster using
 ## Requirements
 
 * pymemcache
-* Django 1.7+.
+* Django >= 1.8
 
 It was written and tested on Python 2.7 and 3.5.
 
