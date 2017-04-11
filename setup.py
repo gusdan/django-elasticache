@@ -15,7 +15,7 @@ setup(
     license='MIT',
     keywords='elasticache amazon cache pymemcache memcached aws',
     packages=['django_elastipymemcache'],
-    install_requires=['pymemcache', 'Django>=1.7'],
+    install_requires=['pymemcache', 'Django>=1.8'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
