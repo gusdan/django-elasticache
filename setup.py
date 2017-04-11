@@ -7,7 +7,7 @@ setup(
     name='django-elastipymemcache',
     version=django_elastipymemcache.__version__,
     description='Django cache backend for Amazon ElastiCache (memcached)',
-    long_description=open('README.rst').read(),
+    long_description=open('README.md').read(),
     author='Danil Gusev',
     platforms='any',
     author_email='info@uncovertruth.jp',
