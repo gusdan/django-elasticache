@@ -32,9 +32,6 @@ CACHES = {
     'default': {
         'BACKEND': 'django_elastipymemcache.memcached.ElastiPyMemCache',
         'LOCATION': '[configuration endpoint].com:11211',
-        'OPTIONS' {
-            'IGNORE_CLUSTER_ERRORS': [True,False],
-        },
     }
 }
 ```
