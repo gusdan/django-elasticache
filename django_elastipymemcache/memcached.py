@@ -50,6 +50,7 @@ class ElastiPyMemCache(BaseMemcachedCache):
 
         # Patch for django<1.11
         self._options = self._options or dict()
+        self._cluster_timeout = self._options.get('cluster_timeout')
 
     def clear_cluster_nodes_cache(self):
         """clear internal cache with list of nodes in cluster"""
@@ -64,7 +65,8 @@ class ElastiPyMemCache(BaseMemcachedCache):
         try:
             return get_cluster_info(
                 server,
-                port
+                port,
+                self._cluster_timeout
             )['nodes']
         except (OSError, socket.gaierror, socket.timeout) as err:
             logger.debug(
@@ -76,9 +78,16 @@ class ElastiPyMemCache(BaseMemcachedCache):
 
     @property
     def _cache(self):
+
         if getattr(self, '_client', None) is None:
+
+            options = self._options
+            options.setdefault('ignore_exc', True)
+            options.pop('cluster_timeout', None)
+
             self._client = self._lib.Client(
-                self.get_cluster_nodes(), **self._options)
+                self.get_cluster_nodes(), **options)
+
         return self._client
 
     @invalidate_cache_after_error
