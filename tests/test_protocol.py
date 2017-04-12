@@ -113,7 +113,7 @@ def test_no_configuration_protocol_support_with_errors_ignored(Telnet):
         call(b'version\n'),
         call(b'config get cluster\n'),
     ])
-    eq_(info['version'], '1.4.34')
+    eq_(info['version'], b'1.4.34')
     eq_(info['nodes'], [('test', 0)])
 
 

@@ -1,6 +1,8 @@
-nose
+check-manifest
 coverage
 flake8
 isort
+mock
+nose
+pymemcache
 readme_renderer
-check-manifest
