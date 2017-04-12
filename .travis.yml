@@ -56,8 +56,9 @@ deploy:
   user: uncovertruth
   password:
     secure: FtNY+8/F79RYpJzfusYBC9HFfDWlevUbS4J5TECm8tyMxAxeHMpLOaL4dd/wPkRkuctUM5LyXux5rpVQTfMA4Dvjdufc7BqexCt056GznJPFRjHW19ExeguTHXW810RIVrFmo5Dk1/AlMpGEeiL3OXoI041h7/vRZe6QWP6P0NCz9UrkZ/Qc9JDZqkXBmhiwvt4P3gu5sbxaiM4IqxhSQ/4DoI87SQlD3nUfgRT2TkqN/Jx0ME0H7l+40HeqZvVq6sh9Muc5/XhDEx5HWt9BSgymeXXG6mT3sewBfinJlQ5/1Rrm+IHa48m/3mLJkfYEs15BQCizvDc6/dRfdtCc/9jYl3e67yEM6Akn+52pTOU4Oa727ZUpAYNCzfY+pHc3E9oI0YFuOl+WYNo5bWUh3IlWAl/eXDGWOvRMF4waUbyjUMiZ+C4pRmRKznYZB9xgbPxHDlR6CMn8P5F5j3ZVbW0BxUEjlDFcDT65gflBhKS1eWTOQRMobR+yjQKlYMlIeCgITbuEYbn2GbL84aN42U910rSQ4SryzqjaOIyxtZG53cGDw2NMm4q7bIwRkj6gbvliA36HIFaRQrI/wtrmr3guy4raPRpEGi7OhFoaPxaqkEs+yF55MEafNM4eJc9swM/K/mbN6FFKIWoWVyXUCUDIWvcPYLWPR/kLidWCNzw=
+  distributions: sdist bdist_wheel
+  skip_upload_docs: true
   on:
     repo: uncovertruth/django-elastipymemcache
     tags: true
-    distributions: sdist bdist_wheel
     condition: $TOX_ENV = py36-dj111
