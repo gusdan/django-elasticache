@@ -6,7 +6,7 @@ django-elastipymemcache
 :Author: UNCOVER TRUTH Inc. <develop@uncovertruth.co.jp>
 :Copyright: © UNCOVER TRUTH Inc.
 :Date: 2017-04-11
-:Version: 0.0.1
+:Version: 0.0.2
 
 .. index: README
 .. image:: https://travis-ci.org/uncovertruth/django-elastipymemcache.svg?branch=master
@@ -36,7 +36,7 @@ Requirements
 Installation
 ------------
 
-Get it from `pypix <http://pypi.python.org/pypi/django-elastipymemcache>`_::
+Get it from `pypi <http://pypi.python.org/pypi/django-elastipymemcache>`_::
 
     pip install django-elastipymemcache
 
