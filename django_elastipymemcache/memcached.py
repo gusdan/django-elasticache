@@ -44,6 +44,8 @@ class ElastiPyMemCache(BaseMemcachedCache):
             raise InvalidCacheBackendError(
                 'Server configuration should be in format IP:port')
 
+        # Patch for django<1.11
+        self._options = self._options or dict()
         self._ignore_cluster_errors = self._options.get(
             'ignore_exc', False)
 
