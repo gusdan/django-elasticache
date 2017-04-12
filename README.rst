@@ -12,7 +12,11 @@ django-elastipymemcache
 .. image:: https://travis-ci.org/uncovertruth/django-elastipymemcache.svg?branch=master
     :target: https://travis-ci.org/uncovertruth/django-elastipymemcache
 .. image:: https://codecov.io/gh/uncovertruth/django-elastipymemcache/branch/master/graph/badge.svg
-  :target: https://codecov.io/gh/uncovertruth/django-elastipymemcache
+    :target: https://codecov.io/gh/uncovertruth/django-elastipymemcache
+.. image:: https://requires.io/github/uncovertruth/django-elastipymemcache/requirements.svg?branch=master
+    :target: https://requires.io/github/uncovertruth/django-elastipymemcache/requirements/?branch=master
+.. image:: https://badge.fury.io/py/django-elastipymemcache.svg
+    :target: https://badge.fury.io/py/django-elastipymemcache
 
 Purpose
 -------
