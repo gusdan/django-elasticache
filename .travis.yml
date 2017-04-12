@@ -50,7 +50,7 @@ matrix:
 install:
 - pip install tox codecov
 script:
-- tox -v
+- tox -e "$TOX_ENV"
 after_success:
 - codecov
 deploy:
