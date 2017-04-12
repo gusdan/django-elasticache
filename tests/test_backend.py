@@ -25,7 +25,7 @@ def test_split_servers(get_cluster_info):
     }
     backend._lib.Client = Mock()
     assert backend._cache
-    get_cluster_info.assert_called_once_with('h', '0', False)
+    get_cluster_info.assert_called_once_with('h', '0')
     backend._lib.Client.assert_called_once_with(servers)
 
 
@@ -48,7 +48,7 @@ def test_node_info_cache(get_cluster_info):
     eq_(backend._cache.get.call_count, 2)
     eq_(backend._cache.set.call_count, 2)
 
-    get_cluster_info.assert_called_once_with('h', '0', False)
+    get_cluster_info.assert_called_once_with('h', '0')
 
 
 @patch('django.conf.settings', global_settings)

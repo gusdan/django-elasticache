@@ -1,6 +1,7 @@
 """
 Backend for django cache
 """
+import logging
 import socket
 from functools import wraps
 
@@ -9,6 +10,9 @@ from django.core.cache.backends.memcached import BaseMemcachedCache
 
 from . import client as pyMemcache_client
 from .cluster_utils import get_cluster_info
+
+
+logger = logging.getLogger(__name__)
 
 
 def invalidate_cache_after_error(f):
@@ -46,8 +50,6 @@ class ElastiPyMemCache(BaseMemcachedCache):
 
         # Patch for django<1.11
         self._options = self._options or dict()
-        self._ignore_cluster_errors = self._options.get(
-            'ignore_exc', False)
 
     def clear_cluster_nodes_cache(self):
         """clear internal cache with list of nodes in cluster"""
@@ -62,13 +64,15 @@ class ElastiPyMemCache(BaseMemcachedCache):
         try:
             return get_cluster_info(
                 server,
-                port,
-                self._ignore_cluster_errors
+                port
             )['nodes']
-        except (socket.gaierror, socket.timeout) as err:
-            raise Exception('Cannot connect to cluster {} ({})'.format(
-                self._servers[0], err
-            ))
+        except (OSError, socket.gaierror, socket.timeout) as err:
+            logger.debug(
+                'Cannot connect to cluster %s, err: %s',
+                self._servers[0],
+                err
+            )
+            return [(server, int(port))]
 
     @property
     def _cache(self):
