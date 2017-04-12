@@ -26,12 +26,16 @@ matrix:
     env: TOX_ENV=py35-dj110
   - python: 2.7
     env: TOX_ENV=py27-dj111
+  - python: pypy
+    env: TOX_ENV=pypy-dj111
   - python: 3.4
     env: TOX_ENV=py34-dj111
   - python: 3.5
     env: TOX_ENV=py35-dj111
   - python: 3.6
     env: TOX_ENV=py36-dj111
+  - python: pypy3
+    env: TOX_ENV=pypy3-dj111
   - python: 3.5
     env: TOX_ENV=py35-djdev
   - python: 3.6
