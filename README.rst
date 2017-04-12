@@ -36,7 +36,7 @@ Requirements
 Installation
 ------------
 
-Get it from `pypix <http://pypi.python.org/pypi/django-elastipymemcache>`_::
+Get it from `pypi <http://pypi.python.org/pypi/django-elastipymemcache>`_::
 
     pip install django-elastipymemcache
 
