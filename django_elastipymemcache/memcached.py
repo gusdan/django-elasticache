@@ -72,7 +72,7 @@ class ElastiPyMemCache(BaseMemcachedCache):
                 self._servers[0],
                 err
             )
-            return [(server, int(port))]
+            return []
 
     @property
     def _cache(self):
