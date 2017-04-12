@@ -51,6 +51,7 @@ matrix:
   allow_failures:
   - env: TOX_ENV=py35-djdev
   - env: TOX_ENV=py36-djdev
+  - env: TOX_ENV=pypy3-dj111
 install:
 - pip install tox
 script:
