@@ -48,11 +48,9 @@ matrix:
   - env: TOX_ENV=py35-djdev
   - env: TOX_ENV=py36-djdev
 install:
-- pip install tox codecov
+- pip install tox
 script:
 - tox -e "$TOX_ENV"
-after_success:
-- codecov
 deploy:
   provider: pypi
   user: uncovertruth
