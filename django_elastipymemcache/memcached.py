@@ -50,7 +50,8 @@ class ElastiPyMemCache(BaseMemcachedCache):
 
         # Patch for django<1.11
         self._options = self._options or dict()
-        self._cluster_timeout = self._options.get('cluster_timeout')
+        self._cluster_timeout = self._options.get(
+                'cluster_timeout', socket._GLOBAL_DEFAULT_TIMEOUT)
 
     def clear_cluster_nodes_cache(self):
         """clear internal cache with list of nodes in cluster"""
