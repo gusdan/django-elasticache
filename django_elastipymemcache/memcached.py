@@ -1,6 +1,7 @@
 """
 Backend for django cache
 """
+import logging
 import socket
 from functools import wraps
 
@@ -9,6 +10,9 @@ from django.core.cache.backends.memcached import BaseMemcachedCache
 
 from . import client as pyMemcache_client
 from .cluster_utils import get_cluster_info
+
+
+logger = logging.getLogger(__name__)
 
 
 def invalidate_cache_after_error(f):
@@ -46,8 +50,8 @@ class ElastiPyMemCache(BaseMemcachedCache):
 
         # Patch for django<1.11
         self._options = self._options or dict()
-        self._ignore_cluster_errors = self._options.get(
-            'ignore_exc', False)
+        self._cluster_timeout = self._options.get(
+                'cluster_timeout', socket._GLOBAL_DEFAULT_TIMEOUT)
 
     def clear_cluster_nodes_cache(self):
         """clear internal cache with list of nodes in cluster"""
@@ -63,18 +67,28 @@ class ElastiPyMemCache(BaseMemcachedCache):
             return get_cluster_info(
                 server,
                 port,
-                self._ignore_cluster_errors
+                self._cluster_timeout
             )['nodes']
-        except (socket.gaierror, socket.timeout) as err:
-            raise Exception('Cannot connect to cluster {} ({})'.format(
-                self._servers[0], err
-            ))
+        except (OSError, socket.gaierror, socket.timeout) as err:
+            logger.debug(
+                'Cannot connect to cluster %s, err: %s',
+                self._servers[0],
+                err
+            )
+            return []
 
     @property
     def _cache(self):
+
         if getattr(self, '_client', None) is None:
+
+            options = self._options
+            options.setdefault('ignore_exc', True)
+            options.pop('cluster_timeout', None)
+
             self._client = self._lib.Client(
-                self.get_cluster_nodes(), **self._options)
+                self.get_cluster_nodes(), **options)
+
         return self._client
 
     @invalidate_cache_after_error

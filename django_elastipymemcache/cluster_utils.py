@@ -3,6 +3,7 @@ utils for discovery cluster
 """
 import re
 from distutils.version import StrictVersion
+import socket
 from telnetlib import Telnet
 
 from django.utils.encoding import smart_text
@@ -18,7 +19,7 @@ class WrongProtocolData(ValueError):
             'Unexpected response {} for command {}'.format(response, cmd))
 
 
-def get_cluster_info(host, port, ignore_cluster_errors=False):
+def get_cluster_info(host, port, timeout=socket._GLOBAL_DEFAULT_TIMEOUT):
     """
     return dict with info about nodes in cluster and current version
     {
@@ -29,7 +30,7 @@ def get_cluster_info(host, port, ignore_cluster_errors=False):
         'version': '1.4.4'
     }
     """
-    client = Telnet(host, int(port))
+    client = Telnet(host, int(port), timeout=timeout)
     client.write(b'version\n')
     res = client.read_until(b'\r\n').strip()
     version_list = res.split(b' ')
@@ -46,14 +47,6 @@ def get_cluster_info(host, port, ignore_cluster_errors=False):
         re.compile(b'ERROR\r\n')
     ])
     client.close()
-
-    if res == b'ERROR\r\n' and ignore_cluster_errors:
-        return {
-            'version': version,
-            'nodes': [
-                (smart_text(host), int(port))
-            ]
-        }
 
     ls = list(filter(None, re.compile(br'\r?\n').split(res)))
     if len(ls) != 4:

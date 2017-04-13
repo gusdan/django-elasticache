@@ -103,27 +103,13 @@ def test_ubuntu_protocol(Telnet):
     ])
 
 
-@patch('django_elastipymemcache.cluster_utils.Telnet')
-def test_no_configuration_protocol_support_with_errors_ignored(Telnet):
-    client = Telnet.return_value
-    client.read_until.side_effect = TEST_PROTOCOL_4_READ_UNTIL
-    client.expect.side_effect = TEST_PROTOCOL_4_EXPECT
-    info = get_cluster_info('test', 0, ignore_cluster_errors=True)
-    client.write.assert_has_calls([
-        call(b'version\n'),
-        call(b'config get cluster\n'),
-    ])
-    eq_(info['version'], b'1.4.34')
-    eq_(info['nodes'], [('test', 0)])
-
-
 @raises(WrongProtocolData)
 @patch('django_elastipymemcache.cluster_utils.Telnet')
 def test_no_configuration_protocol_support_with_errors(Telnet):
     client = Telnet.return_value
     client.read_until.side_effect = TEST_PROTOCOL_4_READ_UNTIL
     client.expect.side_effect = TEST_PROTOCOL_4_EXPECT
-    get_cluster_info('test', 0, ignore_cluster_errors=False)
+    get_cluster_info('test', 0)
     client.write.assert_has_calls([
         call(b'version\n'),
         call(b'config get cluster\n'),
