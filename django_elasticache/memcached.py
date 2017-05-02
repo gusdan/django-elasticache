@@ -94,7 +94,10 @@ class ElastiCache(PyLibMCCache):
 
         client = self._lib.Client(self.get_cluster_nodes())
         if self._options:
-            client.behaviors = self._options
+            # In Django 1.11, all behaviors are shifted into a behaviors dict
+            # Attempt to get from there, and fall back to old behavior if the behaviors
+            # key does not exist
+            client.behaviors = self._options.get('behaviors', self._options)
 
         container._client = client
 
