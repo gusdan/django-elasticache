@@ -91,6 +91,11 @@ class ElastiPyMemCache(BaseMemcachedCache):
 
         return self._client
 
+    def close(self, **kwargs):
+        # libmemcached manages its own connections. Don't call disconnect_all()
+        # as it resets the failover state and creates unnecessary reconnects.
+        pass
+
     @invalidate_cache_after_error
     def get(self, *args, **kwargs):
         return super(ElastiPyMemCache, self).get(*args, **kwargs)
