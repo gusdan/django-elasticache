@@ -21,6 +21,7 @@ def test_split_servers(get_cluster_info):
     from django_elastipymemcache.memcached import (
         ElastiPyMemCache,
         deserialize_pickle,
+        serialize_pickle,
     )
     backend = ElastiPyMemCache('h:0', {})
     servers = [('h1', 0), ('h2', 0)]
@@ -34,7 +35,8 @@ def test_split_servers(get_cluster_info):
     backend._lib.Client.assert_called_once_with(
         servers,
         deserializer=deserialize_pickle,
-        ignore_exc=True
+        ignore_exc=True,
+        serializer=serialize_pickle
     )
 
 
@@ -44,6 +46,7 @@ def test_node_info_cache(get_cluster_info):
     from django_elastipymemcache.memcached import (
         ElastiPyMemCache,
         deserialize_pickle,
+        serialize_pickle,
     )
     servers = [('h1', 0), ('h2', 0)]
     get_cluster_info.return_value = {
@@ -59,7 +62,8 @@ def test_node_info_cache(get_cluster_info):
     backend._lib.Client.assert_called_once_with(
         servers,
         deserializer=deserialize_pickle,
-        ignore_exc=True
+        ignore_exc=True,
+        serializer=serialize_pickle
     )
     eq_(backend._cache.get.call_count, 2)
     eq_(backend._cache.set.call_count, 2)
