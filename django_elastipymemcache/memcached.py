@@ -5,6 +5,11 @@ import logging
 import socket
 from functools import wraps
 
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
+
 from django.core.cache import InvalidCacheBackendError
 from django.core.cache.backends.memcached import BaseMemcachedCache
 
@@ -13,6 +18,19 @@ from .cluster_utils import get_cluster_info
 
 
 logger = logging.getLogger(__name__)
+
+
+def serialize_pickle(key, value):
+    if isinstance(value, str):
+        return value, 1
+    return pickle.dumps(value), 2
+
+
+def deserialize_pickle(key, value, flags):
+    if flags == 1:
+        return value
+    if flags == 2:
+        return pickle.loads(value)
 
 
 def invalidate_cache_after_error(f):
@@ -83,6 +101,8 @@ class ElastiPyMemCache(BaseMemcachedCache):
         if getattr(self, '_client', None) is None:
 
             options = self._options
+            options['serializer'] = serialize_pickle
+            options['deserializer'] = deserialize_pickle
             options.setdefault('ignore_exc', True)
             options.pop('cluster_timeout', None)
 
@@ -90,6 +110,11 @@ class ElastiPyMemCache(BaseMemcachedCache):
                 self.get_cluster_nodes(), **options)
 
         return self._client
+
+    def close(self, **kwargs):
+        # libmemcached manages its own connections. Don't call disconnect_all()
+        # as it resets the failover state and creates unnecessary reconnects.
+        pass
 
     @invalidate_cache_after_error
     def get(self, *args, **kwargs):
