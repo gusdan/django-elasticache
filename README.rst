@@ -6,7 +6,7 @@ django-elastipymemcache
 :Author: UNCOVER TRUTH Inc. <develop@uncovertruth.co.jp>
 :Copyright: © UNCOVER TRUTH Inc.
 :Date: 2017-04-11
-:Version: 0.0.3
+:Version: 0.0.5
 
 .. index: README
 .. image:: https://travis-ci.org/uncovertruth/django-elastipymemcache.svg?branch=master
