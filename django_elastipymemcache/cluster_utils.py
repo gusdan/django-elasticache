@@ -19,7 +19,11 @@ class WrongProtocolData(ValueError):
             'Unexpected response {} for command {}'.format(response, cmd))
 
 
-def get_cluster_info(host, port, ignore_cluster_errors=False, timeout=socket._GLOBAL_DEFAULT_TIMEOUT):
+def get_cluster_info(
+        host,
+        port,
+        ignore_cluster_errors=False,
+        timeout=socket._GLOBAL_DEFAULT_TIMEOUT):
     """
     return dict with info about nodes in cluster and current version
     {
