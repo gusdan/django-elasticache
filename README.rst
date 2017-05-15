@@ -52,6 +52,7 @@ Your cache backend should look something like this::
             'OPTIONS': {
               'cluster_timeout': 1, # its used when get cluster info
               'ignore_exc': True, # pymemcache Client params
+              'ignore_cluster_errors': True, # ignore get cluster info error
             }
         }
     }

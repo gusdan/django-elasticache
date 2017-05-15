@@ -70,6 +70,8 @@ class ElastiPyMemCache(BaseMemcachedCache):
         self._options = self._options or dict()
         self._cluster_timeout = self._options.get(
                 'cluster_timeout', socket._GLOBAL_DEFAULT_TIMEOUT)
+        self._ignore_cluster_errors = self._options.get(
+                'ignore_cluster_errors', False)
 
     def clear_cluster_nodes_cache(self):
         """clear internal cache with list of nodes in cluster"""
@@ -85,6 +87,7 @@ class ElastiPyMemCache(BaseMemcachedCache):
             return get_cluster_info(
                 server,
                 port,
+                self._ignore_cluster_errors,
                 self._cluster_timeout
             )['nodes']
         except (OSError, socket.gaierror, socket.timeout) as err:
@@ -105,6 +108,7 @@ class ElastiPyMemCache(BaseMemcachedCache):
             options['deserializer'] = deserialize_pickle
             options.setdefault('ignore_exc', True)
             options.pop('cluster_timeout', None)
+            options.pop('ignore_cluster_errors', None)
 
             self._client = self._lib.Client(
                 self.get_cluster_nodes(), **options)
