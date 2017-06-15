@@ -1,5 +1,5 @@
 check-manifest==0.35
-coverage
+coverage==4.4.1
 flake8
 isort
 mock
