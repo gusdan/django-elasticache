@@ -1,4 +1,4 @@
-check-manifest
+check-manifest==0.35
 coverage
 flake8
 isort
