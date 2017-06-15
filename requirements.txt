@@ -1,6 +1,6 @@
 check-manifest==0.35
 coverage==4.4.1
-flake8
+flake8==3.3.0
 isort
 mock
 nose
