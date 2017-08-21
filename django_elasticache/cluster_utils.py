@@ -14,7 +14,7 @@ class WrongProtocolData(ValueError):
     """
     def __init__(self, cmd, response):
         super(WrongProtocolData, self).__init__(
-            'Unexpected response {} for command {}'.format(response, cmd))
+            'Unexpected response {0} for command {1}'.format(response, cmd))
 
 
 def get_cluster_info(host, port, ignore_cluster_errors=False):
@@ -50,7 +50,7 @@ def get_cluster_info(host, port, ignore_cluster_errors=False):
         return {
             'version': version,
             'nodes': [
-                '{}:{}'.format(smart_text(host),
+                '{0}:{1}'.format(smart_text(host),
                                smart_text(port))
             ]
         }
@@ -67,7 +67,7 @@ def get_cluster_info(host, port, ignore_cluster_errors=False):
     try:
         for node in ls[2].split(b' '):
             host, ip, port = node.split(b'|')
-            nodes.append('{}:{}'.format(smart_text(ip or host),
+            nodes.append('{0}:{1}'.format(smart_text(ip or host),
                                         smart_text(port)))
     except ValueError:
         raise WrongProtocolData(cmd, res)

@@ -73,7 +73,7 @@ class ElastiCache(PyLibMCCache):
                     get_cluster_info(server, port,
                                      self._ignore_cluster_errors)['nodes'])
             except (socket.gaierror, socket.timeout) as err:
-                raise Exception('Cannot connect to cluster {} ({})'.format(
+                raise Exception('Cannot connect to cluster {0} ({1})'.format(
                     self._servers[0], err
                 ))
         return self._cluster_nodes_cache
