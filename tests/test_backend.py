@@ -99,3 +99,33 @@ def test_invalidate_cache(get_cluster_info):
         pass
     eq_(backend._cache.get.call_count, 2)
     eq_(get_cluster_info.call_count, 3)
+
+
+@patch('django.conf.settings', global_settings)
+@patch('django_elastipymemcache.memcached.get_cluster_info')
+def test_client_get_many(get_cluster_info):
+    from django_elastipymemcache.memcached import ElastiPyMemCache
+
+    servers = [('h1', 0), ('h2', 0)]
+    get_cluster_info.return_value = {
+        'nodes': servers
+    }
+
+    backend = ElastiPyMemCache('h:0', {})
+    ret = backend.get_many(['key1'])
+    eq_(ret, {})
+
+    # When server does not found...
+    with patch('pymemcache.client.hash.HashClient._get_client') as p:
+        p.return_value = None
+        ret = backend.get_many(['key2'])
+        eq_(ret, {})
+
+    with patch('django_elastipymemcache.client.Client.get_many') as p:
+        with patch('pymemcache.client.hash.HashClient._safely_run_func') as p2:
+            p2.return_value = {
+                ':1:key3': 1509111630.048594
+            }
+
+            ret = backend.get_many(['key3'])
+            eq_(ret, {'key3': 1509111630.048594})
