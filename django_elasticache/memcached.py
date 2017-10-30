@@ -24,7 +24,7 @@ def invalidate_cache_after_error(f):
         except Exception as e:
             log.warning('MemcachedError: %s', e, exc_info=True)
             self.clear_cluster_nodes_cache()
-            return False
+            return None  # Treat as a cache miss
     return wrapper
 
 
