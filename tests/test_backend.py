@@ -121,14 +121,14 @@ def test_client_get_many(get_cluster_info):
         ret = backend.get_many(['key2'])
         eq_(ret, {})
 
-    with patch('django_elastipymemcache.client.Client.get_many'):
-        with patch('pymemcache.client.hash.HashClient._safely_run_func') as p2:
-            p2.return_value = {
-                ':1:key3': 1509111630.048594
-            }
+    with patch('django_elastipymemcache.client.Client.get_many'), \
+            patch('pymemcache.client.hash.HashClient._safely_run_func') as p2:
+        p2.return_value = {
+            ':1:key3': 1509111630.048594
+        }
 
-            ret = backend.get_many(['key3'])
-            eq_(ret, {'key3': 1509111630.048594})
+        ret = backend.get_many(['key3'])
+        eq_(ret, {'key3': 1509111630.048594})
 
     # If False value is included, ignore it.
     with patch('pymemcache.client.hash.HashClient.get_many') as p:
@@ -143,5 +143,19 @@ def test_client_get_many(get_cluster_info):
             {
                 'key1': 1509111630.048594,
                 'key3': 1509111630.058594
+            },
+        )
+
+    with patch('pymemcache.client.hash.HashClient.get_many') as p:
+        p.return_value = {
+            ':1:key1': None,
+            ':1:key2': 1509111630.048594,
+            ':1:key3': False,
+        }
+        ret = backend.get_many(['key1', 'key2', 'key3'])
+        eq_(
+            ret,
+            {
+                'key2': 1509111630.048594,
             },
         )
