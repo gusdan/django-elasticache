@@ -6,6 +6,6 @@ class Client(HashClient):
         # pymemcache's HashClient may returns {'key': False}
         end = super(Client, self).get_many(keys, gets, args, kwargs)
 
-        return {key: end[key] for key in end if end[key]}
+        return {key: end.get(key) for key in end if end.get(key)}
 
     get_multi = get_many
