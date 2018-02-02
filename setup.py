@@ -22,10 +22,10 @@ setup(
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
-        'Framework :: Django :: 1.8',
         'Framework :: Django :: 1.9',
         'Framework :: Django :: 1.10',
         'Framework :: Django :: 1.11',
+        'Framework :: Django :: 1.20',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
@@ -42,6 +42,6 @@ setup(
     include_package_data=True,
     install_requires=[
         'pymemcache',
-        'Django>=1.8',
+        'Django>=1.9',
     ],
 )
