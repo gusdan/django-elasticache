@@ -64,3 +64,5 @@ deploy:
     repo: uncovertruth/django-elastipymemcache
     tags: true
     condition: $TOX_ENV = py36-dj20
+notifications:
+  email: false
