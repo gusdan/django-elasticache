@@ -5,8 +5,8 @@ django-elastipymemcache
 :Info: Simple Django cache backend for Amazon ElastiCache (memcached based).
 :Author: UNCOVER TRUTH Inc. <develop@uncovertruth.co.jp>
 :Copyright: © UNCOVER TRUTH Inc.
-:Date: 2017-04-11
-:Version: 1.0.0
+:Date: 2018-06-19
+:Version: 1.1.0
 
 .. index: README
 .. image:: https://travis-ci.org/uncovertruth/django-elastipymemcache.svg?branch=master
@@ -31,7 +31,7 @@ Requirements
 ------------
 
 * pymemcache
-* Django>=1.8
+* Django>=1.11
 
 Installation
 ------------
