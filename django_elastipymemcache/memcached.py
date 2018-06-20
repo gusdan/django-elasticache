@@ -66,8 +66,6 @@ class ElastiPyMemCache(BaseMemcachedCache):
             raise InvalidCacheBackendError(
                 'Server configuration should be in format IP:port')
 
-        # Patch for django<1.11
-        self._options = self._options or dict()
         self._cluster_timeout = self._options.get(
                 'cluster_timeout', socket._GLOBAL_DEFAULT_TIMEOUT)
         self._ignore_cluster_errors = self._options.get(

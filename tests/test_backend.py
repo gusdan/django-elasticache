@@ -1,7 +1,6 @@
 import socket
 import sys
 
-from django.conf import global_settings, settings
 from nose.tools import eq_
 
 if sys.version < '3':
@@ -10,12 +9,6 @@ else:
     from unittest.mock import patch, Mock
 
 
-# Initialize django 1.7
-settings.configure()
-global_settings.configured = True
-
-
-@patch('django.conf.settings', global_settings)
 @patch('django_elastipymemcache.memcached.get_cluster_info')
 def test_split_servers(get_cluster_info):
     from django_elastipymemcache.memcached import (
@@ -40,7 +33,6 @@ def test_split_servers(get_cluster_info):
     )
 
 
-@patch('django.conf.settings', global_settings)
 @patch('django_elastipymemcache.memcached.get_cluster_info')
 def test_node_info_cache(get_cluster_info):
     from django_elastipymemcache.memcached import (
@@ -72,7 +64,6 @@ def test_node_info_cache(get_cluster_info):
             'h', '0', False, socket._GLOBAL_DEFAULT_TIMEOUT)
 
 
-@patch('django.conf.settings', global_settings)
 @patch('django_elastipymemcache.memcached.get_cluster_info')
 def test_invalidate_cache(get_cluster_info):
     from django_elastipymemcache.memcached import ElastiPyMemCache
@@ -101,7 +92,6 @@ def test_invalidate_cache(get_cluster_info):
     eq_(get_cluster_info.call_count, 3)
 
 
-@patch('django.conf.settings', global_settings)
 @patch('django_elastipymemcache.memcached.get_cluster_info')
 def test_client_get_many(get_cluster_info):
     from django_elastipymemcache.memcached import ElastiPyMemCache
