@@ -10,7 +10,6 @@ else:
     from unittest.mock import patch, Mock
 
 
-# Initialize django 1.7
 settings.configure()
 global_settings.configured = True
 
