@@ -36,7 +36,7 @@ Your cache backend should look something like this::
         'default': {
             'BACKEND': 'django_elasticache.memcached.ElastiCache',
             'LOCATION': 'cache-c.draaaf.cfg.use1.cache.amazonaws.com:11211',
-            'OPTIONS' {
+            'OPTIONS': {
                 'IGNORE_CLUSTER_ERRORS': [True,False],
             },
         }
