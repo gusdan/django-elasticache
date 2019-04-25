@@ -2,10 +2,15 @@
 Backend for django cache
 """
 import socket
+import logging
+
 from functools import wraps
 from django.core.cache import InvalidCacheBackendError
 from django.core.cache.backends.memcached import PyLibMCCache
 from .cluster_utils import get_cluster_info
+
+
+log = logging.getLogger('django.elasticache')
 
 
 def invalidate_cache_after_error(f):
@@ -16,9 +21,10 @@ def invalidate_cache_after_error(f):
     def wrapper(self, *args, **kwds):
         try:
             return f(self, *args, **kwds)
-        except Exception:
+        except Exception as e:
+            log.warning('MemcachedError: %s', e, exc_info=True)
             self.clear_cluster_nodes_cache()
-            raise
+            return None  # Treat as a cache miss
     return wrapper
 
 
@@ -104,6 +110,10 @@ class ElastiCache(PyLibMCCache):
         return client
 
     @invalidate_cache_after_error
+    def add(self, *args, **kwargs):
+        return super(ElastiCache, self).add(*args, **kwargs)
+
+    @invalidate_cache_after_error
     def get(self, *args, **kwargs):
         return super(ElastiCache, self).get(*args, **kwargs)
 
@@ -122,3 +132,7 @@ class ElastiCache(PyLibMCCache):
     @invalidate_cache_after_error
     def delete(self, *args, **kwargs):
         return super(ElastiCache, self).delete(*args, **kwargs)
+
+    @invalidate_cache_after_error
+    def delete_many(self, *args, **kwargs):
+        return super(ElastiCache, self).delete_many(*args, **kwargs)
