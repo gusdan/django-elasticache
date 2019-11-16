@@ -16,7 +16,7 @@ def invalidate_cache_after_error(f):
     def wrapper(self, *args, **kwds):
         try:
             return f(self, *args, **kwds)
-        except Exception:
+        except (Exception, self._lib.Error):
             self.clear_cluster_nodes_cache()
             raise
     return wrapper
