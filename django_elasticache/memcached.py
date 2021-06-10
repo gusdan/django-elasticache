@@ -5,6 +5,7 @@ import socket
 from functools import wraps
 from django.core.cache import InvalidCacheBackendError
 from django.core.cache.backends.memcached import PyLibMCCache
+from threading import local
 from .cluster_utils import get_cluster_info
 
 
@@ -28,6 +29,7 @@ class ElastiCache(PyLibMCCache):
     it used pylibmc in binary mode
     """
     def __init__(self, server, params):
+        self._local = local()
         self.update_params(params)
         super(ElastiCache, self).__init__(server, params)
         if len(self._servers) > 1:
