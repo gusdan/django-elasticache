@@ -4,7 +4,7 @@ Backend for django cache
 import socket
 from functools import wraps
 from django.core.cache import InvalidCacheBackendError
-from django.core.cache.backends.memcached import PyLibMCCache
+from django.core.cache.backends.memcached import BaseMemcachedCache
 from threading import local
 from .cluster_utils import get_cluster_info
 
@@ -23,7 +23,7 @@ def invalidate_cache_after_error(f):
     return wrapper
 
 
-class ElastiCache(PyLibMCCache):
+class ElastiCache(BaseMemcachedCache):
     """
     backend for Amazon ElastiCache (memcached) with auto discovery mode
     it used pylibmc in binary mode
@@ -31,7 +31,8 @@ class ElastiCache(PyLibMCCache):
     def __init__(self, server, params):
         self._local = local()
         self.update_params(params)
-        super(ElastiCache, self).__init__(server, params)
+        import pylibmc
+        super(ElastiCache, self).__init__(server, params, library=pylibmc, value_not_found_exception=pylibmc.NotFound)
         if len(self._servers) > 1:
             raise InvalidCacheBackendError(
                 'ElastiCache should be configured with only one server '
