@@ -1,12 +1,22 @@
 """
 Backend for django cache
 """
+import logging
 import socket
 from functools import wraps
 from django.core.cache import InvalidCacheBackendError
 from django.core.cache.backends.memcached import BaseMemcachedCache
 from threading import local
 from .cluster_utils import get_cluster_info
+
+try:
+    import pylibmc
+    from pylibmc import Error as MemcachedError
+except ImportError:
+    raise InvalidCacheBackendError('Could not import pylibmc.')
+
+
+logger = logging.getLogger('django.elasticache')
 
 
 def invalidate_cache_after_error(f):
@@ -107,8 +117,13 @@ class ElastiCache(BaseMemcachedCache):
         return client
 
     @invalidate_cache_after_error
-    def get(self, *args, **kwargs):
-        return super(ElastiCache, self).get(*args, **kwargs)
+    def get(self, key, default=None, version=None):
+        try:
+            return super(ElastiCache, self).get(*args, **kwargs)
+        except MemcachedError as e:
+            logger.error('MemcachedError: %s', e, exc_info=True)
+            return default
+
 
     @invalidate_cache_after_error
     def get_many(self, *args, **kwargs):
