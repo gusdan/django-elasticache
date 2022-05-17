@@ -11,7 +11,7 @@ setup(
     author='Danil Gusev',
     platforms='any',
     author_email='danil.gusev@gmail.com',
-    url='http://github.com/gusdan/django-elasticache',
+    url='https://github.com/gusdan/django-elasticache',
     license='MIT',
     keywords='elasticache amazon cache pylibmc memcached aws',
     packages=['django_elasticache'],
