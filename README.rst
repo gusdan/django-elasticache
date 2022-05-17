@@ -2,9 +2,9 @@ Amazon ElastiCache backend for Django
 =====================================
 
 Simple Django cache backend for Amazon ElastiCache (memcached based). It uses
-`pylibmc <http://github.com/lericson/pylibmc>`_ and sets up a connection to each
+`pylibmc <https://github.com/lericson/pylibmc>`_ and sets up a connection to each
 node in the cluster using
-`auto discovery <http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/AutoDiscovery.html>`_.
+`auto discovery <https://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/AutoDiscovery.html>`_.
 
 
 Requirements
@@ -18,11 +18,11 @@ It was written and tested on Python 2.7 and 3.4.
 Installation
 ------------
 
-Get it from `pypi <http://pypi.python.org/pypi/django-elasticache>`_::
+Get it from `pypi <https://pypi.python.org/pypi/django-elasticache>`_::
 
     pip install django-elasticache
 
-or `github <http://github.com/gusdan/django-elasticache>`_::
+or `github <https://github.com/gusdan/django-elasticache>`_::
 
     pip install -e git://github.com/gusdan/django-elasticache.git#egg=django-elasticache
 
