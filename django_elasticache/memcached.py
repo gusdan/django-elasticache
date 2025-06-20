@@ -3,7 +3,7 @@ Backend for django cache
 """
 import socket
 from functools import wraps
-from django.core.cache import InvalidCacheBackendError
+from django.core.cache.backends.base import InvalidCacheBackendError
 from django.core.cache.backends.memcached import PyLibMCCache
 from .cluster_utils import get_cluster_info
 
